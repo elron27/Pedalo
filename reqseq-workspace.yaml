@@ -1,0 +1,9 @@
+reqseq-workspace: 1
+name: Pedalo
+repositories:
+  - name: pedalo
+    url: ""
+    main: true
+metamodel:
+  repository: pedalo
+  path: metamodel

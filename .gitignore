@@ -1,0 +1,2 @@
+*.reqseq-tmp
+.reqseq/local.yaml
