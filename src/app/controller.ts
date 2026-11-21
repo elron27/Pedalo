@@ -396,9 +396,10 @@ export class Controller {
     if (this.timer) clearInterval(this.timer);
     this.timer = undefined;
     this.d.log?.('fahrt.ende', { sekunden: rec.records.length });
-    this.player?.finish();
-    this.player = null;
+    const player = this.player;
+    this.player = null; // zuerst abmelden: player.finish() meldet 'fertig' und würde sonst finishRide() erneut anstoßen
     this.recorder = null;
+    player?.finish();
     await this.guard(undefined, async () => {
       await rec.finish();
       await this.d.wake.release().catch((e) => this.fail(e));
