@@ -9,10 +9,12 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "test:evidence": "node tools/test-evidence.mjs",
     "ak-refs": "node tools/ak-refs.mjs"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/node": "^26.6.6",
     "@types/web-bluetooth": "^0.0.22",
     "typescript": "^7.0.2",
@@ -20,6 +22,7 @@
     "vitest": "^5.1.1"
   },
   "dependencies": {
-    "@garmin/fitsdk": "^21.222.0"
+    "@garmin/fitsdk": "^21.222.0",
+    "preact": "^11.2.0"
   }
 }

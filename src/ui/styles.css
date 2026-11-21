@@ -1,0 +1,232 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0b0d;
+  --karte: #17171b;
+  --rand: #2b2b33;
+  --text: #ececf1;
+  --gedaempft: #9a9aa6;
+  --akzent: #2fb86b;
+  --akzent-text: #04130a;
+  --gefahr: #d9534f;
+  --warn: #e0a030;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  font-size: 28px;
+  margin: 8px 0 16px;
+}
+h2 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.karte {
+  background: var(--karte);
+  border: 1px solid var(--rand);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.karte.warnung {
+  border-color: var(--warn);
+}
+
+button {
+  background: var(--akzent);
+  color: var(--akzent-text);
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 2px;
+}
+button.sekundaer {
+  background: #2a2a33;
+  color: var(--text);
+}
+button.aktiv {
+  background: var(--akzent);
+}
+button.gefahr {
+  background: var(--gefahr);
+  color: #fff;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+input,
+select,
+textarea {
+  background: #101014;
+  color: var(--text);
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  padding: 8px;
+  font: inherit;
+  width: 100%;
+}
+label {
+  display: block;
+  margin: 8px 0;
+  color: var(--gedaempft);
+}
+label > input,
+label > select {
+  margin-top: 4px;
+}
+
+.zeile {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 6px 0;
+}
+.zeile > span {
+  flex: 1 1 260px;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.meldung {
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.meldung.fehler {
+  background: #3a1a1a;
+  border: 1px solid var(--gefahr);
+}
+.meldung.hinweis {
+  background: #14261c;
+  border: 1px solid var(--akzent);
+}
+.fehlertext {
+  color: #ff9a96;
+}
+
+strong[data-status='verbunden'] {
+  color: var(--akzent);
+}
+strong[data-status='getrennt'] {
+  color: #ff9a96;
+}
+
+/* Fahrt: große Zahlen, aus mehreren Metern Entfernung lesbar */
+.fahrt .kopf {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--gedaempft);
+}
+.banner {
+  text-align: center;
+  background: var(--warn);
+  color: #1a1200;
+  font-weight: 700;
+  font-size: 28px;
+  border-radius: 8px;
+  padding: 6px;
+  margin: 8px 0;
+}
+.werte {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+.kachel {
+  background: var(--karte);
+  border: 1px solid var(--rand);
+  border-radius: 12px;
+  padding: 10px 16px;
+  text-align: center;
+}
+.kachel .beschriftung {
+  color: var(--gedaempft);
+  font-size: 22px;
+}
+.kachel .zahl {
+  font-size: clamp(72px, 16vw, 200px);
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.kachel .unter {
+  font-size: 28px;
+  color: var(--akzent);
+}
+.profil {
+  width: 100%;
+  height: 120px;
+  background: var(--karte);
+  border-radius: 8px;
+}
+.profil rect {
+  fill: #3b6f55;
+}
+.profil rect.aktuell {
+  fill: var(--akzent);
+}
+.profil rect.vorbei {
+  fill: #2a3a33;
+}
+.profil .marke {
+  stroke: #fff;
+  stroke-width: 2;
+}
+.vorschau p {
+  font-size: 22px;
+  margin: 8px 0;
+}
+.steuerung {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+.steuerung button {
+  font-size: 20px;
+  padding: 14px 20px;
+}
+.intensitaet {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 10px;
+  }
+}

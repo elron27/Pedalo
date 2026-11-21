@@ -1,0 +1,34 @@
+import { render } from 'preact';
+import { Controller } from './app/controller';
+import { IdbStore } from './app/idb';
+import { BrowserWakeLock } from './app/wakelock';
+import { Library } from './domain/library';
+import { ProfileStore } from './domain/profile';
+import { BleHeartRate, FtmsTrainer } from './devices/webbluetooth';
+import { IcuClient } from './icu/client';
+import { systemClock } from './ports';
+import { App } from './ui/App';
+import './ui/styles.css';
+
+const kv = new IdbStore('pedalo');
+const controller = new Controller({
+  profiles: new ProfileStore(kv),
+  library: new Library(kv),
+  recStore: kv,
+  trainer: new FtmsTrainer(),
+  hr: new BleHeartRate(),
+  wake: new BrowserWakeLock(),
+  clock: systemClock,
+  makeIcu: (acc) => new IcuClient(acc),
+  saveFile: (bytes, name) => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/octet-stream' }));
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
+  },
+});
+
+// Zwischengespeichertes vor dem Schließen des Tabs sichern (die Aufzeichnung schreibt ohnehin alle 5 s).
+render(<App c={controller} />, document.getElementById('app')!);
+void controller.init();

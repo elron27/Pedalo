@@ -125,15 +125,20 @@ export async function recoverRecording(store: KeyValueStore, sessionId: string):
   return { meta, records };
 }
 
-/** Sitzungen, die nicht ordentlich beendet wurden. */
-export async function findUnfinishedSessions(store: KeyValueStore): Promise<SessionMeta[]> {
+/** Alle gespeicherten Sitzungen, neueste zuerst. */
+export async function listSessions(store: KeyValueStore): Promise<SessionMeta[]> {
   const metas: SessionMeta[] = [];
   for (const k of await store.keys('rec/')) {
     if (!k.endsWith('/meta')) continue;
     const m = await store.get<SessionMeta>(k);
-    if (m && !m.finished) metas.push(m);
+    if (m) metas.push(m);
   }
-  return metas;
+  return metas.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
+}
+
+/** Sitzungen, die nicht ordentlich beendet wurden. */
+export async function findUnfinishedSessions(store: KeyValueStore): Promise<SessionMeta[]> {
+  return (await listSessions(store)).filter((m) => !m.finished);
 }
 
 export async function deleteRecording(store: KeyValueStore, sessionId: string): Promise<void> {

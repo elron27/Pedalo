@@ -9,7 +9,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "noEmit": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "types": ["vite/client", "web-bluetooth", "node"]
   },
-  "include": ["src", "tests", "spike"]
+  "include": ["src", "tests", "spike", "e2e"]
 }

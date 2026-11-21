@@ -6,3 +6,5 @@ dist/
 docs/m0/live.jsonl
 docs/m0/*.json
 docs/m0/*.fit
+test-results/
+playwright-report/

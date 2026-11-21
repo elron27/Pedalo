@@ -19,6 +19,7 @@ const m0LiveLog = {
 
 export default defineConfig({
   plugins: [m0LiveLog],
+  esbuild: { jsx: 'automatic', jsxImportSource: 'preact' },
   test: {
     include: ['tests/**/*.test.ts'],
     environment: 'node',
