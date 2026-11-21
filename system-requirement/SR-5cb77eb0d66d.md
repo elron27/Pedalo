@@ -9,6 +9,7 @@ acceptance-criteria:
     text: Die erzeugte .fit-Datei lässt sich in intervals.icu und Strava importieren.
 derives-from:
   - { id: 19841055-e735-4b35-8b44-7676f5da1c33, version: n2:a3a3c258df7582fa, title: Training auswerten und hochladen }
+verification-method: demonstration
 ---
 
 Export: .fit lokal speichern und Upload zu intervals.icu. (Ursprüngliche ID im Requirements-Dokument: REQ-C-005)

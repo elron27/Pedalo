@@ -9,6 +9,7 @@ acceptance-criteria:
     text: Die Oberfläche nutzt durchgehend ein dunkles Farbschema.
 derives-from:
   - { id: ef78473c-283b-4f70-9633-7eb60aaafb2f, version: n2:0c7c26ce44cc9885, title: Werte während des Trainings sehen }
+verification-method: test
 ---
 
 Dunkles Design. (Ursprüngliche ID im Requirements-Dokument: REQ-N-002)

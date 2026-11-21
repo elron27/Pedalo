@@ -9,6 +9,7 @@ acceptance-criteria:
     text: Pro Sekunde wird ein Datensatz mit Watt, Puls und Trittfrequenz gespeichert.
 derives-from:
   - { id: c826e6f8-2592-4629-bf3c-1e879bee7ec7, version: n2:f7ebe0b72fc33674, title: Training aufzeichnen und sicher speichern }
+verification-method: test
 ---
 
 Watt, Puls und Trittfrequenz im Sekundentakt aufzeichnen. (Ursprüngliche ID im Requirements-Dokument: REQ-F-040)

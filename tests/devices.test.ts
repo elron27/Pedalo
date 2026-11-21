@@ -31,7 +31,7 @@ describe('Protokoll (Bytes aus dem M0-Test am echten Bike)', () => {
     expect(parseControlResponse(view('44 00'))).toBeUndefined();
   });
 
-  it('[SR-f22ac4/AK-v6ng] liest den Puls aus Messwerten von Sigma HRM und Polar H10, auch ohne Hautkontakt', () => {
+  it('liest den Puls aus Messwerten von Sigma HRM und Polar H10, auch ohne Hautkontakt', () => {
     expect(parseHeartRate(view('16 48 2e 03 04 03')).bpm).toBe(72); // Sigma, mit RR-Intervallen
     expect(parseHeartRate(view('10 55 f3 02')).bpm).toBe(85); // Polar H10
     expect(parseHeartRate(view('00 55')).bpm).toBe(85);

@@ -7,7 +7,7 @@ requirement-type: functional
 acceptance-criteria:
   - key: w830
     text: Given eine Bibliothek mit mindestens einem Training, when der Fahrer ein Training an der Seite auswählt, then startet dieses Training.
-verification-method: demonstration
+verification-method: test
 derives-from:
   - { id: cbff42bd-f3da-484f-a16f-e793354675b0, version: n2:4823169e575aa6f8, title: Ein Training durchfahren }
 ---
