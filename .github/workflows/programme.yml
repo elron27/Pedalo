@@ -1,0 +1,109 @@
+name: Pedalo-Programme bauen und veröffentlichen (Mac und Windows)
+
+# Auf jedem Push werden das Mac- und das Windows-Programm gebaut und getestet. Auf main werden sie zusätzlich als
+# Release veröffentlicht (Version 0.1.<Laufnummer>), damit sie unter „Releases“ im Repository heruntergeladen werden können.
+# Die Web-Version (GitHub Pages) läuft unabhängig davon über pages.yml.
+on:
+  push:
+    branches: [main, mac-app]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: programme-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bauen:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            name: mac
+            script: dist:mac
+            exe: release/mac-arm64/Pedalo.app/Contents/MacOS/Pedalo
+          - os: windows-latest
+            name: windows
+            script: dist:win
+            exe: release/win-unpacked/Pedalo.exe
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            mac/package-lock.json
+
+      - name: Web-App testen und bauen
+        run: |
+          npm ci
+          npm test
+          npm run build
+
+      - name: Hülle installieren und Version setzen
+        working-directory: mac
+        run: |
+          npm ci
+          npm pkg set version=0.1.${{ github.run_number }}
+
+      - name: Programm bauen
+        working-directory: mac
+        run: npm run ${{ matrix.script }}
+
+      - name: Rauchtest mit dem gebauten Programm
+        working-directory: mac
+        run: PEDALO_EXE="$PWD/${{ matrix.exe }}" npm test
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pedalo-${{ matrix.name }}
+          path: |
+            mac/release/*.dmg
+            mac/release/*.zip
+            mac/release/*.exe
+          if-no-files-found: error
+
+  release:
+    if: github.ref == 'refs/heads/main'
+    needs: bauen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dateien
+          merge-multiple: true
+      - name: Release veröffentlichen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          TAG=v0.1.${{ github.run_number }}
+          ls -la dateien
+          cat > notes.md <<'EOF'
+          ## Pedalo zum Herunterladen
+
+          Alternativ gibt es Pedalo ohne Installation im Browser: https://elron27.github.io/Pedalo/ (Chrome oder Edge).
+
+          ### Mac
+          1. Passende Datei laden: **Mac-arm64** für Macs mit Apple-Chip (M1 und neuer), **Mac-x64** für ältere Intel-Macs. Im Zweifel: Apfel-Menü → „Über diesen Mac“.
+          2. `.dmg` öffnen und Pedalo in den Ordner „Programme“ ziehen.
+          3. **Erster Start:** Das Programm ist nicht von Apple beglaubigt. Rechtsklick auf Pedalo → „Öffnen“ → „Öffnen“ bestätigen. Zeigt macOS stattdessen „ist beschädigt“, im Terminal einmal `xattr -cr /Applications/Pedalo.app` eingeben.
+          4. Bluetooth erlauben, wenn macOS fragt.
+
+          ### Windows
+          1. `Pedalo-…-Windows-Setup.exe` laden und starten.
+          2. Zeigt Windows „Der Computer wurde durch Windows geschützt“, auf „Weitere Informationen“ → „Trotzdem ausführen“ klicken (das Programm ist nicht signiert).
+
+          Eine Anleitung steht in der App unter „Anleitung und Hilfe“.
+          EOF
+          gh release create "$TAG" dateien/* \
+            --title "Pedalo $TAG" --notes-file notes.md --target "$GITHUB_SHA" --latest
