@@ -1,0 +1,21 @@
+{
+  "name": "pedalo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:evidence": "node tools/test-evidence.mjs",
+    "ak-refs": "node tools/ak-refs.mjs"
+  },
+  "devDependencies": {
+    "@types/web-bluetooth": "^0.0.22",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  }
+}

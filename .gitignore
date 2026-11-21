@@ -1,2 +1,5 @@
 *.reqseq-tmp
 .reqseq/local.yaml
+node_modules/
+dist/
+.tmp/
