@@ -14,9 +14,9 @@ export default defineConfig({
     acceptDownloads: true,
   },
   webServer: {
-    command: 'npx vite --port 4173 --strictPort',
+    command: 'npm run build && npx vite preview --port 4173 --strictPort',
     url: 'http://localhost:4173',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 60_000,
   },
 });

@@ -5,7 +5,11 @@ import { fmtTime, T } from './texts';
 
 function useAppState(c: Controller): AppState {
   const [s, setS] = useState(c.state());
-  useEffect(() => c.subscribe(() => setS(c.state())), [c]);
+  useEffect(() => {
+    // Zustand nachholen: Änderungen zwischen dem ersten Zeichnen und dem Anmelden dürfen nicht verloren gehen.
+    setS(c.state());
+    return c.subscribe(() => setS(c.state()));
+  }, [c]);
   return s;
 }
 
