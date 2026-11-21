@@ -68,19 +68,26 @@ export async function installFakes(page: Page): Promise<void> {
             }
             fake.connected = true;
           }
+          const cache: Record<number, unknown> = {};
+          const mkChar = (uuid: number) => {
+            if (cache[uuid]) return cache[uuid] as Target;
+            const c = new Target() as Target & { uuid: string; value?: DataView; startNotifications: () => Promise<void>; writeValueWithResponse: (b: BufferSource) => Promise<void> };
+            c.uuid = `0000${uuid.toString(16).padStart(4, '0')}-0000-1000-8000-00805f9b34fb`;
+            c.startNotifications = async () => {};
+            c.writeValueWithResponse = async (b) => {
+              if (!fake.connected) throw new Error('GATT Server is disconnected.');
+              fake.writes.push(Array.from(new Uint8Array(b as ArrayBuffer)));
+            };
+            if (uuid === 0x2ad2) fake.bikeChar = c;
+            if (uuid === 0x2a37) fake.hrChars[id] = c;
+            cache[uuid] = c;
+            return c;
+          };
           return {
+            disconnect: () => {},
             getPrimaryService: async () => ({
-              getCharacteristic: async (uuid: number) => {
-                const c = new Target() as Target & { value?: DataView; startNotifications: () => Promise<void>; writeValueWithResponse: (b: BufferSource) => Promise<void> };
-                c.startNotifications = async () => {};
-                c.writeValueWithResponse = async (b) => {
-                  if (!fake.connected) throw new Error('GATT Server is disconnected.');
-                  fake.writes.push(Array.from(new Uint8Array(b as ArrayBuffer)));
-                };
-                if (uuid === 0x2ad2) fake.bikeChar = c;
-                if (uuid === 0x2a37) fake.hrChars[id] = c;
-                return c;
-              },
+              getCharacteristic: async (uuid: number) => mkChar(uuid),
+              getCharacteristics: async () => (kind === 'bike' ? [mkChar(0x2acc), mkChar(0x2ad2), mkChar(0x2ad8), mkChar(0x2ad9), mkChar(0x2ada)] : [mkChar(0x2a37)]),
             }),
           };
         },

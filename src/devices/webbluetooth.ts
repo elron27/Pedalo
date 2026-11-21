@@ -20,6 +20,8 @@ export class FtmsTrainer implements TrainerPort {
   private dataCbs: ((d: TrainerData) => void)[] = [];
   private discCbs: (() => void)[] = [];
   private queue: Promise<unknown> = Promise.resolve();
+  /** Entwicklungsprotokoll (optional). */
+  log: (kind: string, data?: unknown) => void = () => {};
 
   get name(): string | undefined {
     return this.device?.name;
@@ -38,8 +40,19 @@ export class FtmsTrainer implements TrainerPort {
   async connect(): Promise<void> {
     if (!this.device?.gatt) throw new Error('Bike ist noch nicht gekoppelt.');
     const server = await this.device.gatt.connect();
+    this.log('bike.gatt.verbunden');
     const svc = await server.getPrimaryService(FTMS);
-    const data = await svc.getCharacteristic(BIKE_DATA);
+    // Wie im M0-Versuch zuerst alle Eigenschaften des Dienstes abfragen (das vollständige Entdecken klappt zuverlässiger
+    // als die gezielte Abfrage einer einzelnen Eigenschaft) und dann die benötigten heraussuchen.
+    const chars = await svc.getCharacteristics();
+    this.log('bike.eigenschaften', chars.map((c) => c.uuid.slice(4, 8)));
+    const find = (id: number) => chars.find((c) => parseInt(c.uuid.slice(4, 8), 16) === id);
+    const data = find(BIKE_DATA);
+    const control = find(CONTROL_POINT);
+    if (!data || !control) {
+      server.disconnect();
+      throw new Error('Das Bike meldet keine Leistungsdaten über FTMS. Bitte Bike aus- und wieder einschalten und neu verbinden.');
+    }
     data.addEventListener('characteristicvaluechanged', (ev) => {
       const v = (ev.target as BluetoothRemoteGATTCharacteristic).value;
       if (!v) return;
@@ -47,8 +60,9 @@ export class FtmsTrainer implements TrainerPort {
       for (const cb of this.dataCbs) cb(d);
     });
     await data.startNotifications();
-    this.control = await svc.getCharacteristic(CONTROL_POINT);
+    this.control = control;
     await this.write(encodeRequestControl());
+    this.log('bike.bereit');
   }
 
   disconnect(): void {

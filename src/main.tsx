@@ -13,11 +13,13 @@ import './ui/styles.css';
 
 const log = createLogger(import.meta.env.DEV);
 const kv = new IdbStore('pedalo');
+const ftms = new FtmsTrainer();
+ftms.log = log;
 const controller = new Controller({
   profiles: new ProfileStore(kv),
   library: new Library(kv),
   recStore: kv,
-  trainer: loggedTrainer(new FtmsTrainer(), log),
+  trainer: loggedTrainer(ftms, log),
   hr: new BleHeartRate(),
   wake: new BrowserWakeLock(),
   log,
