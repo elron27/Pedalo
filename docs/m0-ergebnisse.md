@@ -43,3 +43,14 @@ Grundlage: Protokoll `docs/m0/protokoll-2026-11-21-lauf1.json` (lokal, nicht im 
 **Pulsgurt:** Sigma HRM lief durchgehend (72 bis 130 bpm, passend zur Belastung).
 
 **Weiterhin offen:** intervals.icu (Lesen, Upload, CORS, Blockstruktur), Abbruch während der Fahrt, Pause per Zielleistung.
+
+## intervals.icu (Lauf 2)
+
+- **CORS: kein Hindernis.** `GET /api/v1/athlete/{id}/events` mit Basic-Auth (`API_KEY:<Schlüssel>`) aus dem Browser (localhost): Status 200. Auch der Upload `POST /athlete/{id}/activities` mit .fit als `multipart/form-data` kam an (Status 200, Antwort mit Aktivitäts-ID). **Kein Proxy nötig.**
+- **Die Aktivität aus dem Upload-Test liegt wirklich in intervals.icu** und muss dort (und bei Strava, falls weitergereicht) von Hand gelöscht werden.
+- **Kalender enthält mehr als Radtraining:** 7 Termine in 14 Tagen: Ride, WeightTraining (leere `steps`, nur Beschreibung), Run (Puls-Ziel statt Leistung). Die App muss nach `type` filtern.
+- **Blockstruktur kommt an (Annahme bestätigt).** `workout_doc.steps[]` mit `duration` in Sekunden und `power: {units: "w", value: 151, target: "3s"}`. Wiederholungen als Gruppe `{reps: 2, steps: [...], duration: <Summe>}`. `text` ist optional (Block ohne Namen kommt vor).
+- **Leistung steht in absoluten Watt, nicht in % FTP.** Die Werte sind aus dem FTP-Stand zur Planungszeit umgerechnet (Zonen im Dokument ergeben FTP von etwa 274 W). Der Termin enthält zusätzlich `icu_ftp`. Offene Entscheidung: Watt wie angegeben fahren oder auf den aktuellen FTP des Fahrers umrechnen (Faktor aktueller FTP durch `icu_ftp`).
+- **Nicht belegt:** Darstellung eines offenen Blocks („bis Taste“), von Rampen und tieferer Verschachtelung. Dafür gab es kein Beispiel.
+
+Geänderte Requirements: SR-130c03 (Typ Ride, Dauer und Leistung), SR-ac287d (Watt, Wiederholungsgruppen, offene Punkte).
