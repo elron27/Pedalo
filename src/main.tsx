@@ -1,6 +1,7 @@
 import { render } from 'preact';
 import { Controller } from './app/controller';
 import { IdbStore } from './app/idb';
+import { createLogger, loggedTrainer } from './app/debuglog';
 import { BrowserWakeLock } from './app/wakelock';
 import { Library } from './domain/library';
 import { ProfileStore } from './domain/profile';
@@ -10,14 +11,16 @@ import { systemClock } from './ports';
 import { App } from './ui/App';
 import './ui/styles.css';
 
+const log = createLogger(import.meta.env.DEV);
 const kv = new IdbStore('pedalo');
 const controller = new Controller({
   profiles: new ProfileStore(kv),
   library: new Library(kv),
   recStore: kv,
-  trainer: new FtmsTrainer(),
+  trainer: loggedTrainer(new FtmsTrainer(), log),
   hr: new BleHeartRate(),
   wake: new BrowserWakeLock(),
+  log,
   clock: systemClock,
   makeIcu: (acc) => new IcuClient(acc),
   saveFile: (bytes, name) => {

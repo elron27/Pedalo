@@ -13,6 +13,8 @@ Voraussetzung: Node.js LTS. `npm install`, dann:
 - `npm test` – Tests ausführen
 - `npm run test:evidence` – Tests ausführen und das Ergebnis als Nachweis nach `evidence/` schreiben (je Lauf eine neue Datei)
 - `npm run ak-refs [SR-xxxxxx]` – Akzeptanzkriterien mit der Referenz für den Testnamen `[SR-xxxxxx/AK-yyyy]`
-- `npm run dev` / `npm run build` – App starten / bauen
+- `npm run dev` – App im Entwicklungsmodus (http://localhost:5173), schreibt Befehle und Fehler live nach `docs/m0/live.jsonl`
+- `npm run build`, dann `npm run preview` – App bauen und lokal betreiben (http://localhost:4173)
+- `npm run test:e2e` – Browsertests in Chrome mit simuliertem Bike und Pulsgurt
 
 Der Pfad zur ReqSeq-CLI ist in `tools/reqseq.mjs` voreingestellt (`C:/Program Files/ReqSeq/bin/reqseq.cmd`) und über die Umgebungsvariable `REQSEQ` änderbar. Plan: `docs/umsetzungsplan.md`.

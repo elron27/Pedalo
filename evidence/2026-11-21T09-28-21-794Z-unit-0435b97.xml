@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="52" failures="0" errors="0" time="0.5896968">
+    <testsuite name="tests/devices.test.ts" timestamp="2026-11-21T09:28:23.208Z" hostname="DESKTOP-C9LQ1A1" tests="13" failures="0" errors="0" skipped="0" time="0.0134503">
+        <testcase classname="tests/devices.test.ts" name="Protokoll (Bytes aus dem M0-Test am echten Bike) &gt; liest Indoor Bike Data" time="0.0012702">
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Protokoll (Bytes aus dem M0-Test am echten Bike) &gt; erzeugt dieselben Befehle wie im Test: Zielwatt, Simulation, Steuerung anfordern" time="0.0003497">
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Protokoll (Bytes aus dem M0-Test am echten Bike) &gt; liest Antworten des Bikes" time="0.0001505">
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Protokoll (Bytes aus dem M0-Test am echten Bike) &gt; liest den Puls aus Messwerten von Sigma HRM und Polar H10, auch ohne Hautkontakt" time="0.0003024">
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Verbindung halten &gt; [SR-f1a89f/AK-fy62] zeigt nach dem Koppeln den Status verbunden bzw. getrennt" time="0.0018797"><properties><property name="reqseq:element" value="980fa596-bb97-47d5-a8b4-cbb650f1a89f"/><property name="reqseq:version" value="n2:8a2881e9cb370274"/><property name="reqseq:criterion" value="980fa596-bb97-47d5-a8b4-cbb650f1a89f:fy62"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.208Z"/></properties>
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Verbindung halten &gt; [SR-d51418/AK-np6p] zeigt auch beim Pulsgurt den Status verbunden bzw. getrennt" time="0.0003804"><properties><property name="reqseq:element" value="23edb0c3-3a50-410b-b753-8125a4d51418"/><property name="reqseq:version" value="n2:24e2d09b9fe855b4"/><property name="reqseq:criterion" value="23edb0c3-3a50-410b-b753-8125a4d51418:np6p"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.208Z"/></properties>
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Verbindung halten &gt; wiederholt einen gescheiterten ersten Verbindungsversuch (wie im M0-Test)" time="0.000857">
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Verbindung halten &gt; [SR-1a292f/AK-s8zr] bei Bluetooth-Abbruch läuft der Timer weiter, die App verbindet neu und setzt danach die Zielwatt erneut" time="0.0026813"><properties><property name="reqseq:element" value="ace0439c-39ac-4431-b5de-8f30d11a292f"/><property name="reqseq:version" value="n2:1dbd50a7a8045ed5"/><property name="reqseq:criterion" value="ace0439c-39ac-4431-b5de-8f30d11a292f:s8zr"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.208Z"/></properties>
+            <system-err>
+Verbindung Error: Connection attempt failed.
+    at SimTrainer.connect (O:/Dokumente/IT/Programmieren/Pedalo/src/devices/simulators.ts:17:13)
+    at Supervisor.tryConnect (O:/Dokumente/IT/Programmieren/Pedalo/src/devices/supervisor.ts:75:25)
+    at O:/Dokumente/IT/Programmieren/Pedalo/src/devices/supervisor.ts:99:17
+    at callTimer (file:///O:/Dokumente/IT/Programmieren/Pedalo/node_modules/vitest/dist/chunks/index.DNcttN5a.js:4945:25)
+    at runTimersInRange (file:///O:/Dokumente/IT/Programmieren/Pedalo/node_modules/vitest/dist/chunks/index.DNcttN5a.js:5643:26)
+    at doTickInner (file:///O:/Dokumente/IT/Programmieren/Pedalo/node_modules/vitest/dist/chunks/index.DNcttN5a.js:5738:22)
+    at doTick (file:///O:/Dokumente/IT/Programmieren/Pedalo/node_modules/vitest/dist/chunks/index.DNcttN5a.js:5754:21)
+    at file:///O:/Dokumente/IT/Programmieren/Pedalo/node_modules/vitest/dist/chunks/index.DNcttN5a.js:5844:22
+    at Immediate.&lt;anonymous&gt; (file:///O:/Dokumente/IT/Programmieren/Pedalo/node_modules/vitest/dist/chunks/index.DNcttN5a.js:5792:30)
+    at process.processImmediate (node:internal/timers:574:21)
+
+            </system-err>
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Verbindung halten &gt; hört auf, wenn gestoppt wird" time="0.0003149">
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Profile und Pulsgurte &gt; [SR-920097/AK-njhr] jedes Profil behält nach Neustart und Wechsel seinen eigenen FTP" time="0.0032431"><properties><property name="reqseq:element" value="235b645b-ba53-4c50-bc4e-e7ef97920097"/><property name="reqseq:version" value="n2:2221ea8c9dd1e0b4"/><property name="reqseq:criterion" value="235b645b-ba53-4c50-bc4e-e7ef97920097:njhr"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.208Z"/></properties>
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Profile und Pulsgurte &gt; [SR-0bf586/AK-c04m] beim Profilwechsel gelten FTP, Pulsgurt und intervals.icu-Konto des gewählten Profils" time="0.0002367"><properties><property name="reqseq:element" value="f9a7f027-450d-4ac4-9df0-808c8a0bf586"/><property name="reqseq:version" value="n2:378ffcbf2f238482"/><property name="reqseq:criterion" value="f9a7f027-450d-4ac4-9df0-808c8a0bf586:c04m"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.208Z"/></properties>
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Profile und Pulsgurte &gt; [SR-a54eef/AK-nj88] mit zwei gespeicherten Pulsgurten verbindet die App den anderen ohne erneutes Koppeln" time="0.0004354"><properties><property name="reqseq:element" value="6e1bd795-df44-4695-86e1-3175c4a54eef"/><property name="reqseq:version" value="n2:967c8f814e318140"/><property name="reqseq:criterion" value="6e1bd795-df44-4695-86e1-3175c4a54eef:nj88"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.208Z"/></properties>
+        </testcase>
+        <testcase classname="tests/devices.test.ts" name="Profile und Pulsgurte &gt; Upload nur für Profile mit intervals.icu-Konto" time="0.0003618">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ftp.test.ts" timestamp="2026-11-21T09:28:23.211Z" hostname="DESKTOP-C9LQ1A1" tests="5" failures="0" errors="0" skipped="0" time="0.0219718">
+        <testcase classname="tests/ftp.test.ts" name="FTP-Tests &gt; findet den besten Durchschnitt über ein Fenster" time="0.001247">
+        </testcase>
+        <testcase classname="tests/ftp.test.ts" name="FTP-Tests &gt; [SR-e6536b/AK-btdj] ein 20-Minuten-Test liefert einen FTP-Vorschlag (95 % der besten 20 Minuten)" time="0.0004251"><properties><property name="reqseq:element" value="e6d32d1b-1cd9-457f-b218-9d30b0e6536b"/><property name="reqseq:version" value="n2:1500f88f1fa0b385"/><property name="reqseq:criterion" value="e6d32d1b-1cd9-457f-b218-9d30b0e6536b:btdj"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.211Z"/></properties>
+        </testcase>
+        <testcase classname="tests/ftp.test.ts" name="FTP-Tests &gt; [SR-e50794/AK-g5rf] der Rampentest steigert stufenweise, endet bei Abbruch und schlägt einen FTP vor" time="0.0006102"><properties><property name="reqseq:element" value="0a7aa092-c8f3-4101-8ece-7617dde50794"/><property name="reqseq:version" value="n2:733e126f0ab6fdaf"/><property name="reqseq:criterion" value="0a7aa092-c8f3-4101-8ece-7617dde50794:g5rf"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.211Z"/></properties>
+        </testcase>
+        <testcase classname="tests/ftp.test.ts" name="FTP-Tests &gt; [SR-12969a/AK-cgs8] 4DP: zeigt die Bestleistung je Belastung und schlägt die beste 20-Minuten-Leistung als FTP vor" time="0.0004146"><properties><property name="reqseq:element" value="7630cdd6-a515-463e-880e-ea576012969a"/><property name="reqseq:version" value="n2:2c35ebc233371da9"/><property name="reqseq:criterion" value="7630cdd6-a515-463e-880e-ea576012969a:cgs8"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.211Z"/></properties>
+        </testcase>
+        <testcase classname="tests/ftp.test.ts" name="FTP-Tests &gt; [SR-12969a/AK-cgs8] 4DP: echte Aufzeichnung ergibt 274 W als FTP-Vorschlag (wie Wahoo)" time="0.018363"><properties><property name="reqseq:element" value="7630cdd6-a515-463e-880e-ea576012969a"/><property name="reqseq:version" value="n2:2c35ebc233371da9"/><property name="reqseq:criterion" value="7630cdd6-a515-463e-880e-ea576012969a:cgs8"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.211Z"/></properties>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/icu.test.ts" timestamp="2026-11-21T09:28:23.212Z" hostname="DESKTOP-C9LQ1A1" tests="8" failures="0" errors="0" skipped="0" time="0.0268484">
+        <testcase classname="tests/icu.test.ts" name="intervals.icu &gt; [SR-130c03/AK-jhkv] zeigt Radtrainings mit Dauer und Leistung je Block, Kraft und Lauf werden nicht angeboten" time="0.0193496"><properties><property name="reqseq:element" value="8a045155-599e-4190-8862-120d03130c03"/><property name="reqseq:version" value="n2:3fb8c2a96f190076"/><property name="reqseq:criterion" value="8a045155-599e-4190-8862-120d03130c03:jhkv"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.212Z"/></properties>
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="intervals.icu &gt; nennt Radtrainings, die nicht darstellbar sind, statt sie still zu übergehen" time="0.0007575">
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="intervals.icu &gt; meldet abgelehnte Zugangsdaten verständlich" time="0.00075">
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="intervals.icu &gt; [SR-4bd74c/AK-bgx5] der Upload legt die Aktivität im Konto des aktiven Fahrers an; im Gastmodus wird kein Upload angeboten" time="0.0013956"><properties><property name="reqseq:element" value="1f698e0f-3473-49c0-aa1d-203e694bd74c"/><property name="reqseq:version" value="n2:192638f250f8da18"/><property name="reqseq:criterion" value="1f698e0f-3473-49c0-aa1d-203e694bd74c:bgx5"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.212Z"/></properties>
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="intervals.icu &gt; meldet, wenn intervals.icu keine Aktivität angelegt hat" time="0.00036">
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="Prüfung des Quelltextes (automatisierte Inspektion) &gt; [SR-3c3d67/AK-jpwh] Trainings werden ausschließlich über die intervals.icu-API bezogen, es gibt keine Blocks-Schnittstelle" time="0.0007018"><properties><property name="reqseq:element" value="0359b896-dc7d-4cb1-9a42-87da933c3d67"/><property name="reqseq:version" value="n2:b2d86f0ba4b727d8"/><property name="reqseq:criterion" value="0359b896-dc7d-4cb1-9a42-87da933c3d67:jpwh"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.212Z"/></properties>
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="Prüfung des Quelltextes (automatisierte Inspektion) &gt; [SR-0a7b94/AK-rfpd] die App enthält keine Strava-API-Anbindung" time="0.0002718"><properties><property name="reqseq:element" value="1da41459-390f-41e3-9343-3d08840a7b94"/><property name="reqseq:version" value="n2:ff23311a1f4affda"/><property name="reqseq:criterion" value="1da41459-390f-41e3-9343-3d08840a7b94:rfpd"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.212Z"/></properties>
+        </testcase>
+        <testcase classname="tests/icu.test.ts" name="Bibliothek &gt; [SR-35475a/AK-r0vk] ein Favorit ist nach Neustart ohne Internetverbindung in der Bibliothek und startbar" time="0.0023354"><properties><property name="reqseq:element" value="694b905d-561d-41ef-8318-e2da0235475a"/><property name="reqseq:version" value="n2:ae8d9e33c0126e9d"/><property name="reqseq:criterion" value="694b905d-561d-41ef-8318-e2da0235475a:r0vk"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.212Z"/></properties>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/player.test.ts" timestamp="2026-11-21T09:28:23.213Z" hostname="DESKTOP-C9LQ1A1" tests="9" failures="0" errors="0" skipped="0" time="0.0047718">
+        <testcase classname="tests/player.test.ts" name="Player &gt; [SR-00e7dd/AK-cd88] setzt beim Blockwechsel die Zielwatt des Blocks, mit Intensität multipliziert" time="0.0014541"><properties><property name="reqseq:element" value="4da80bb4-7fa2-4f55-9526-fc228900e7dd"/><property name="reqseq:version" value="n2:b20c10b22616bd39"/><property name="reqseq:criterion" value="4da80bb4-7fa2-4f55-9526-fc228900e7dd:cd88"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; wechselt auch bei einem großen Zeitsprung korrekt über mehrere Blöcke" time="0.0001656">
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; [SR-cefa05/AK-tms3] Überspringen springt sofort zum nächsten Block und setzt dessen Zielwatt" time="0.0001475"><properties><property name="reqseq:element" value="2a349b57-efe2-43ed-a9bd-00151acefa05"/><property name="reqseq:version" value="n2:ea6f62f35c0cab75"/><property name="reqseq:criterion" value="2a349b57-efe2-43ed-a9bd-00151acefa05:tms3"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; läuft im offenen Block weiter, bis übersprungen wird, und endet danach" time="0.0001568">
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; [SR-74122b/AK-gt5y] Pause stoppt den Timer, Fortsetzen läuft ab dem Stand weiter" time="0.0001411"><properties><property name="reqseq:element" value="67658519-e58c-4a52-a0a0-2b298274122b"/><property name="reqseq:version" value="n2:aeb60c550c2e6a92"/><property name="reqseq:criterion" value="67658519-e58c-4a52-a0a0-2b298274122b:gt5y"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; [SR-7ed21c/AK-zvs5] eine Prozentänderung wirkt auf den aktuellen und alle folgenden Blöcke" time="0.0001955"><properties><property name="reqseq:element" value="d5092014-b803-4739-a85c-7d9fb37ed21c"/><property name="reqseq:version" value="n2:6092549baf9fe119"/><property name="reqseq:criterion" value="d5092014-b803-4739-a85c-7d9fb37ed21c:zvs5"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; [SR-f073cf/AK-ywz6] freies Training ist ohne Workout startbar und aus dem Workout heraus zuschaltbar, ohne Zielwatt" time="0.000168"><properties><property name="reqseq:element" value="a024c436-a8d9-490d-8ace-496290f073cf"/><property name="reqseq:version" value="n2:bfeb6fd028de1361"/><property name="reqseq:criterion" value="a024c436-a8d9-490d-8ace-496290f073cf:ywz6"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; [SR-1a292f/AK-s8zr] Timer läuft bei Bike-Abbruch weiter, danach wird die Zielwatt erneut gesetzt" time="0.0004974"><properties><property name="reqseq:element" value="ace0439c-39ac-4431-b5de-8f30d11a292f"/><property name="reqseq:version" value="n2:1dbd50a7a8045ed5"/><property name="reqseq:criterion" value="ace0439c-39ac-4431-b5de-8f30d11a292f:s8zr"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/player.test.ts" name="Player &gt; meldet Fehler des Bikes, statt sie zu verschlucken" time="0.0009255">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/recording.test.ts" timestamp="2026-11-21T09:28:23.213Z" hostname="DESKTOP-C9LQ1A1" tests="9" failures="0" errors="0" skipped="0" time="0.5161258">
+        <testcase classname="tests/recording.test.ts" name="Aufzeichnung &gt; [SR-2dda85/AK-y7fv] speichert pro Sekunde einen Datensatz mit Watt, Puls und Trittfrequenz" time="0.0019441"><properties><property name="reqseq:element" value="efaecf07-b766-46ed-9f1e-3c2d9f2dda85"/><property name="reqseq:version" value="n2:7f721717b94e2e3c"/><property name="reqseq:criterion" value="efaecf07-b766-46ed-9f1e-3c2d9f2dda85:y7fv"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name="Aufzeichnung &gt; erfindet keine Werte, wenn ein Sensor fehlt" time="0.00038">
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name="Aufzeichnung &gt; bewältigt die Höchstdauer von 10 Stunden (36.000 Datensätze) in einer gültigen Datei" time="0.5006083">
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name=".fit-Datei &gt; [SR-e21b18/AK-tz7v] nach dem Training entsteht eine gültige .fit-Datei mit allen Datensätzen" time="0.0050579"><properties><property name="reqseq:element" value="ee4c3ac4-519f-46da-a78e-378a9ee21b18"/><property name="reqseq:version" value="n2:72d7af96070b9ca7"/><property name="reqseq:criterion" value="ee4c3ac4-519f-46da-a78e-378a9ee21b18:tz7v"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name=".fit-Datei &gt; schreibt eine Runde je Block" time="0.0020817">
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name=".fit-Datei &gt; benennt die Datei nach Zeit und Training" time="0.001353">
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name="Zwischenspeicherung &gt; [SR-a6bbe0/AK-zjfx] nach Absturz lässt sich die .fit-Datei aus der Zwischenspeicherung erzeugen" time="0.0031239"><properties><property name="reqseq:element" value="45d505de-c333-487a-a1fc-8f9375a6bbe0"/><property name="reqseq:version" value="n2:a0c2790f059ab9ce"/><property name="reqseq:criterion" value="45d505de-c333-487a-a1fc-8f9375a6bbe0:zjfx"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.213Z"/></properties>
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name="Zwischenspeicherung &gt; merkt sich beendete Sitzungen als beendet und löscht auf Wunsch" time="0.0002267">
+        </testcase>
+        <testcase classname="tests/recording.test.ts" name="Zwischenspeicherung &gt; meldet Schreibfehler und versucht es beim nächsten Mal erneut" time="0.0002777">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/smoke.test.ts" timestamp="2026-11-21T09:28:23.214Z" hostname="DESKTOP-C9LQ1A1" tests="1" failures="0" errors="0" skipped="0" time="0.0022267">
+        <testcase classname="tests/smoke.test.ts" name="Testumgebung &gt; läuft" time="0.00114">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/workout.test.ts" timestamp="2026-11-21T09:28:23.214Z" hostname="DESKTOP-C9LQ1A1" tests="7" failures="0" errors="0" skipped="0" time="0.004302">
+        <testcase classname="tests/workout.test.ts" name="Blockstruktur aus intervals.icu &gt; [SR-ac287d/AK-s6gr] rollt Wiederholungen aus, behält Watt genau und kennt offene Blöcke" time="0.0016907"><properties><property name="reqseq:element" value="7c677963-cef2-4d8d-bff6-15256bac287d"/><property name="reqseq:version" value="n2:4228a8105dafe625"/><property name="reqseq:criterion" value="7c677963-cef2-4d8d-bff6-15256bac287d:s6gr"/><property name="reqseq:item" value="0435b97"/><property name="reqseq:date" value="2026-11-21T09:28:23.214Z"/></properties>
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Blockstruktur aus intervals.icu &gt; rollt 6 Wiederholungen mit Sprint aus und übernimmt 798 W unverändert" time="0.0005139">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Blockstruktur aus intervals.icu &gt; rechnet %ftp nur mit FTP des Termins um und meldet sonst einen Fehler" time="0.0002187">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Blockstruktur aus intervals.icu &gt; weist nicht darstellbare Blöcke mit klarer Meldung zurück (Puls, Rampe, leer)" time="0.0003977">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Blockstruktur aus intervals.icu &gt; liefert ein Profil mit Startzeiten, offener Block bekommt eine Anzeigebreite" time="0.0001595">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Handeingabe &gt; liest Minuten, mm:ss und offene Blöcke" time="0.000275">
+        </testcase>
+        <testcase classname="tests/workout.test.ts" name="Handeingabe &gt; nennt die Zeile bei Fehlern" time="0.0001684">
+        </testcase>
+    </testsuite>
+</testsuites>

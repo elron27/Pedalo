@@ -1,0 +1,205 @@
+<testsuites id="" name="" tests="18" failures="5" skipped="0" errors="0" time="10.477004999999998">
+<testsuite name="app.spec.ts" timestamp="2026-11-21T09:25:56.380Z" hostname="" tests="18" failures="5" skipped="0" time="58.456" errors="0">
+<testcase name="Fahrt › [SR-e32fa8/AK-r0yj] Gastmodus: FTP von Hand, freies Training fahren, kein Upload angeboten" classname="app.spec.ts" time="0.996"><properties><property name="reqseq:element" value="465a5e00-8011-4367-863b-fde02ae32fa8"/><property name="reqseq:version" value="n2:1abc45cf53e0f0b8"/><property name="reqseq:criterion" value="465a5e00-8011-4367-863b-fde02ae32fa8:r0yj"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrt › [SR-f073cf/AK-ywz6] freies Training sendet Simulationswerte statt Zielwatt, auch aus einem Workout heraus" classname="app.spec.ts" time="5.647"><properties><property name="reqseq:element" value="a024c436-a8d9-490d-8ace-496290f073cf"/><property name="reqseq:version" value="n2:bfeb6fd028de1361"/><property name="reqseq:criterion" value="a024c436-a8d9-490d-8ace-496290f073cf:ywz6"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\app-Fahrt-SR-f073cf-AK-ywz-61197-ch-aus-einem-Workout-heraus\error-context.md]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  app.spec.ts:58:3 › Fahrt › [SR-f073cf/AK-ywz6] freies Training sendet Simulationswerte statt Zielwatt, auch aus einem Workout heraus 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pedalo' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pedalo' }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Pedalo' })
+
+
+      15 |   await installFakes(page);
+      16 |   await page.goto('/');
+    > 17 |   await expect(page.getByRole('heading', { name: 'Pedalo' })).toBeVisible();
+         |                                                               ^
+      18 | }
+      19 |
+      20 | async function pairBike(page: Page) {
+        at start (O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:17:63)
+        at O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:59:5
+
+    Error Context: ..\test-results\app-Fahrt-SR-f073cf-AK-ywz-61197-ch-aus-einem-Workout-heraus\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Fahrt › [SR-88ab50/AK-pq4b] Watt, Puls, Trittfrequenz, Restzeit des Blocks und Gesamtzeit sind gleichzeitig sichtbar" classname="app.spec.ts" time="1.035"><properties><property name="reqseq:element" value="22e16ad4-5058-497d-b5a8-77c2e388ab50"/><property name="reqseq:version" value="n2:e9a0ee5207b9ccbf"/><property name="reqseq:criterion" value="22e16ad4-5058-497d-b5a8-77c2e388ab50:pq4b"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrt › [SR-f1a89f/AK-fy62] [SR-d51418/AK-np6p] zeigt Status verbunden bzw. getrennt für Bike und Pulsgurt" classname="app.spec.ts" time="4.297"><properties><property name="reqseq:element" value="980fa596-bb97-47d5-a8b4-cbb650f1a89f"/><property name="reqseq:element" value="23edb0c3-3a50-410b-b753-8125a4d51418"/><property name="reqseq:version" value="n2:8a2881e9cb370274"/><property name="reqseq:version" value="n2:24e2d09b9fe855b4"/><property name="reqseq:criterion" value="980fa596-bb97-47d5-a8b4-cbb650f1a89f:fy62"/><property name="reqseq:criterion" value="23edb0c3-3a50-410b-b753-8125a4d51418:np6p"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrt › [SR-1a292f/AK-s8zr] bei Bluetooth-Abbruch läuft der Timer weiter, die App verbindet neu und setzt die Zielwatt erneut" classname="app.spec.ts" time="5.379"><properties><property name="reqseq:element" value="ace0439c-39ac-4431-b5de-8f30d11a292f"/><property name="reqseq:version" value="n2:1dbd50a7a8045ed5"/><property name="reqseq:criterion" value="ace0439c-39ac-4431-b5de-8f30d11a292f:s8zr"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrt › [SR-00e7dd/AK-cd88] beim Blockwechsel wird die Zielwatt des neuen Blocks am Bike gesetzt" classname="app.spec.ts" time="3.624"><properties><property name="reqseq:element" value="4da80bb4-7fa2-4f55-9526-fc228900e7dd"/><property name="reqseq:version" value="n2:b20c10b22616bd39"/><property name="reqseq:criterion" value="4da80bb4-7fa2-4f55-9526-fc228900e7dd:cd88"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrt › [SR-7ed21c/AK-zvs5] die Intensität in Prozent wirkt sofort auf die Zielwatt" classname="app.spec.ts" time="5.697"><properties><property name="reqseq:element" value="d5092014-b803-4739-a85c-7d9fb37ed21c"/><property name="reqseq:version" value="n2:6092549baf9fe119"/><property name="reqseq:criterion" value="d5092014-b803-4739-a85c-7d9fb37ed21c:zvs5"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\app-Fahrt-SR-7ed21c-AK-zvs-7c964-rkt-sofort-auf-die-Zielwatt\error-context.md]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  app.spec.ts:132:3 › Fahrt › [SR-7ed21c/AK-zvs5] die Intensität in Prozent wirkt sofort auf die Zielwatt 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pedalo' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pedalo' }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Pedalo' })
+
+
+      15 |   await installFakes(page);
+      16 |   await page.goto('/');
+    > 17 |   await expect(page.getByRole('heading', { name: 'Pedalo' })).toBeVisible();
+         |                                                               ^
+      18 | }
+      19 |
+      20 | async function pairBike(page: Page) {
+        at start (O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:17:63)
+        at O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:133:5
+
+    Error Context: ..\test-results\app-Fahrt-SR-7ed21c-AK-zvs-7c964-rkt-sofort-auf-die-Zielwatt\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Fahrt › [SR-23612e/AK-pw4j] zeigt den nächsten Block und das Profil des Trainings" classname="app.spec.ts" time="5.714"><properties><property name="reqseq:element" value="ed2ed184-4002-4bf8-9f4d-21f90e23612e"/><property name="reqseq:version" value="n2:716879189a0e79c7"/><property name="reqseq:criterion" value="ed2ed184-4002-4bf8-9f4d-21f90e23612e:pw4j"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\app-Fahrt-SR-23612e-AK-pw4-3daf2-nd-das-Profil-des-Trainings\error-context.md]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  app.spec.ts:141:3 › Fahrt › [SR-23612e/AK-pw4j] zeigt den nächsten Block und das Profil des Trainings 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pedalo' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pedalo' }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Pedalo' })
+
+
+      15 |   await installFakes(page);
+      16 |   await page.goto('/');
+    > 17 |   await expect(page.getByRole('heading', { name: 'Pedalo' })).toBeVisible();
+         |                                                               ^
+      18 | }
+      19 |
+      20 | async function pairBike(page: Page) {
+        at start (O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:17:63)
+        at O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:142:5
+
+    Error Context: ..\test-results\app-Fahrt-SR-23612e-AK-pw4-3daf2-nd-das-Profil-des-Trainings\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Fahrt › [SR-9851f3/AK-x0cv] der Bildschirm bleibt während des Trainings an" classname="app.spec.ts" time="0.651"><properties><property name="reqseq:element" value="b6637372-43c6-4649-bc15-54192f9851f3"/><property name="reqseq:version" value="n2:f0112c3bdef119fa"/><property name="reqseq:criterion" value="b6637372-43c6-4649-bc15-54192f9851f3:x0cv"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Aufzeichnung und Datei › [SR-e21b18/AK-tz7v] nach dem Training lässt sich eine gültige .fit-Datei speichern" classname="app.spec.ts" time="5.078"><properties><property name="reqseq:element" value="ee4c3ac4-519f-46da-a78e-378a9ee21b18"/><property name="reqseq:version" value="n2:72d7af96070b9ca7"/><property name="reqseq:criterion" value="ee4c3ac4-519f-46da-a78e-378a9ee21b18:tz7v"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Aufzeichnung und Datei › [SR-a6bbe0/AK-zjfx] nach geschlossenem Tab lässt sich die .fit-Datei aus der Zwischenspeicherung erzeugen" classname="app.spec.ts" time="8.008"><properties><property name="reqseq:element" value="45d505de-c333-487a-a1fc-8f9375a6bbe0"/><property name="reqseq:version" value="n2:a0c2790f059ab9ce"/><property name="reqseq:criterion" value="45d505de-c333-487a-a1fc-8f9375a6bbe0:zjfx"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrer, Pulsgurte, Bibliothek › [SR-920097/AK-njhr] jedes Profil behält nach Neustart sein eigenes FTP; [SR-0bf586/AK-c04m] Wechsel schaltet das Profil um" classname="app.spec.ts" time="0.47"><properties><property name="reqseq:element" value="235b645b-ba53-4c50-bc4e-e7ef97920097"/><property name="reqseq:element" value="f9a7f027-450d-4ac4-9df0-808c8a0bf586"/><property name="reqseq:version" value="n2:2221ea8c9dd1e0b4"/><property name="reqseq:version" value="n2:378ffcbf2f238482"/><property name="reqseq:criterion" value="235b645b-ba53-4c50-bc4e-e7ef97920097:njhr"/><property name="reqseq:criterion" value="f9a7f027-450d-4ac4-9df0-808c8a0bf586:c04m"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrer, Pulsgurte, Bibliothek › [SR-a54eef/AK-nj88] ein gespeicherter Pulsgurt wird ohne erneutes Koppeln verbunden" classname="app.spec.ts" time="0.42"><properties><property name="reqseq:element" value="6e1bd795-df44-4695-86e1-3175c4a54eef"/><property name="reqseq:version" value="n2:967c8f814e318140"/><property name="reqseq:criterion" value="6e1bd795-df44-4695-86e1-3175c4a54eef:nj88"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Fahrer, Pulsgurte, Bibliothek › [SR-35475a/AK-r0vk] [SR-3dbb4e/AK-w830] ein Favorit ist nach Neustart ohne Internet vorhanden, die Auswahl startet das Training" classname="app.spec.ts" time="0.407"><properties><property name="reqseq:element" value="694b905d-561d-41ef-8318-e2da0235475a"/><property name="reqseq:element" value="5e752333-4be7-480f-9b9c-da58203dbb4e"/><property name="reqseq:version" value="n2:ae8d9e33c0126e9d"/><property name="reqseq:version" value="n2:d184257eafe63179"/><property name="reqseq:criterion" value="694b905d-561d-41ef-8318-e2da0235475a:r0vk"/><property name="reqseq:criterion" value="5e752333-4be7-480f-9b9c-da58203dbb4e:w830"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="intervals.icu › [SR-130c03/AK-jhkv] [SR-4bd74c/AK-bgx5] zeigt Radtrainings mit Blöcken und lädt die Fahrt auf das Konto des aktiven Fahrers hoch" classname="app.spec.ts" time="0.59"><properties><property name="reqseq:element" value="8a045155-599e-4190-8862-120d03130c03"/><property name="reqseq:element" value="1f698e0f-3473-49c0-aa1d-203e694bd74c"/><property name="reqseq:version" value="n2:3fb8c2a96f190076"/><property name="reqseq:version" value="n2:192638f250f8da18"/><property name="reqseq:criterion" value="8a045155-599e-4190-8862-120d03130c03:jhkv"/><property name="reqseq:criterion" value="1f698e0f-3473-49c0-aa1d-203e694bd74c:bgx5"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+</testcase>
+<testcase name="Darstellung › [SR-8bfae1/AK-g9hb] die Oberfläche nutzt auf allen Bildschirmen ein dunkles Farbschema" classname="app.spec.ts" time="5.133"><properties><property name="reqseq:element" value="32628059-9720-4c36-9a65-4ec2e48bfae1"/><property name="reqseq:version" value="n2:61da8bdd639f935e"/><property name="reqseq:criterion" value="32628059-9720-4c36-9a65-4ec2e48bfae1:g9hb"/><property name="reqseq:item" value="6b048f2"/><property name="reqseq:date" value="2026-11-21T09:25:56.380Z"/></properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\app-Darstellung-SR-8bfae1--33b96-rmen-ein-dunkles-Farbschema\error-context.md]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  app.spec.ts:297:3 › Darstellung › [SR-8bfae1/AK-g9hb] die Oberfläche nutzt auf allen Bildschirmen ein dunkles Farbschema 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pedalo' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pedalo' }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Pedalo' })
+
+
+      15 |   await installFakes(page);
+      16 |   await page.goto('/');
+    > 17 |   await expect(page.getByRole('heading', { name: 'Pedalo' })).toBeVisible();
+         |                                                               ^
+      18 | }
+      19 |
+      20 | async function pairBike(page: Page) {
+        at start (O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:17:63)
+        at O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:318:5
+
+    Error Context: ..\test-results\app-Darstellung-SR-8bfae1--33b96-rmen-ein-dunkles-Farbschema\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Darstellung › Live-Werte sind in Vollbildgröße sehr groß (Anhaltspunkt für die Abnahme aus der Distanz)" classname="app.spec.ts" time="5.129">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\app-Darstellung-Live-Werte-5383b-ie-Abnahme-aus-der-Distanz-\error-context.md]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  app.spec.ts:333:3 › Darstellung › Live-Werte sind in Vollbildgröße sehr groß (Anhaltspunkt für die Abnahme aus der Distanz) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Pedalo' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Pedalo' }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Pedalo' })
+
+
+      15 |   await installFakes(page);
+      16 |   await page.goto('/');
+    > 17 |   await expect(page.getByRole('heading', { name: 'Pedalo' })).toBeVisible();
+         |                                                               ^
+      18 | }
+      19 |
+      20 | async function pairBike(page: Page) {
+        at start (O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:17:63)
+        at O:\Dokumente\IT\Programmieren\Pedalo\e2e\app.spec.ts:335:5
+
+    Error Context: ..\test-results\app-Darstellung-Live-Werte-5383b-ie-Abnahme-aus-der-Distanz-\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="FTP-Tests in der Oberfläche › die drei FTP-Tests werden zur Auswahl angeboten" classname="app.spec.ts" time="0.181">
+</testcase>
+</testsuite>
+</testsuites>

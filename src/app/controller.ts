@@ -56,6 +56,8 @@ export interface Deps {
   wake: WakeLockPort;
   clock: Clock;
   makeIcu(account: { athleteId: string; apiKey: string }): IcuClient;
+  /** Entwicklungsprotokoll (optional). */
+  log?: (kind: string, data?: unknown) => void;
   /** Datei an den Fahrer ausgeben (Download). */
   saveFile(bytes: Uint8Array, name: string): void;
 }
@@ -96,8 +98,14 @@ export class Controller {
   constructor(private readonly d: Deps) {
     this.trainerSup = new Supervisor(d.trainer, { onError: (e) => this.fail(e) });
     this.hrSup = new Supervisor(d.hr, { onError: (e) => this.fail(e) });
-    this.trainerSup.onStatus((t) => this.patch({ trainer: t }));
-    this.hrSup.onStatus((h) => this.patch({ hr: h }));
+    this.trainerSup.onStatus((t) => {
+      d.log?.('status.bike', t);
+      this.patch({ trainer: t });
+    });
+    this.hrSup.onStatus((h) => {
+      d.log?.('status.pulsgurt', h);
+      this.patch({ hr: h });
+    });
     this.trainerSup.onConnected(() => this.player?.resendTarget());
     d.trainer.onData((x) => {
       this.lastTrainerAt = d.clock.now();
@@ -127,6 +135,7 @@ export class Controller {
 
   private fail(e: unknown): void {
     console.error(e);
+    this.d.log?.('fehler', String(e));
     const msg = describeError(e);
     if (msg) this.patch({ error: msg });
   }
@@ -312,6 +321,7 @@ export class Controller {
         onError: (e) => (this.s.trainer === 'verbunden' ? this.fail(e) : console.warn('Bike nicht erreichbar, Zielwatt wird nachgesetzt', e)),
       });
       this.player.onChange((ps) => this.onPlayerChange(ps));
+      this.d.log?.('fahrt.start', { kind, training: w?.name, bloecke: w?.blocks.length });
       this.patch({ screen: 'fahrt', rideKind: kind, workout: w, result: undefined, error: undefined });
       void this.d.wake.acquire().catch((e) => this.fail(e));
       this.player.start();
@@ -385,6 +395,7 @@ export class Controller {
     if (!rec || this.s.screen !== 'fahrt') return;
     if (this.timer) clearInterval(this.timer);
     this.timer = undefined;
+    this.d.log?.('fahrt.ende', { sekunden: rec.records.length });
     this.player?.finish();
     this.player = null;
     this.recorder = null;
