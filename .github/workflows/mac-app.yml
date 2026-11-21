@@ -1,0 +1,76 @@
+name: Pedalo für den Mac bauen und veröffentlichen
+
+# Auf jedem Push wird das Mac-Programm gebaut und getestet. Auf main wird es zusätzlich als Release veröffentlicht
+# (Version 0.1.<Laufnummer>), sodass es unter „Releases“ im Repository heruntergeladen werden kann.
+on:
+  push:
+    branches: [main, mac-app]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mac-app-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mac:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            mac/package-lock.json
+
+      - name: Web-App testen und bauen
+        run: |
+          npm ci
+          npm test
+          npm run build
+
+      - name: Mac-Hülle installieren und Version setzen
+        working-directory: mac
+        run: |
+          npm ci
+          npm pkg set version=0.1.${{ github.run_number }}
+
+      - name: Mac-Programm bauen (Apple Silicon und Intel)
+        working-directory: mac
+        run: npm run dist
+
+      - name: Rauchtest mit dem gebauten Programm (Apple Silicon)
+        working-directory: mac
+        run: |
+          APP=$(ls -d release/mac-arm64/Pedalo.app)
+          PEDALO_EXE="$PWD/$APP/Contents/MacOS/Pedalo" npm test
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pedalo-mac
+          path: |
+            mac/release/*.dmg
+            mac/release/*.zip
+
+      - name: Release veröffentlichen (nur auf main)
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=v0.1.${{ github.run_number }}
+          cat > notes.md <<'EOF'
+          ## Pedalo für den Mac
+
+          1. Passende Datei laden: **arm64** für Macs mit Apple-Chip (M1 und neuer), **x64** für ältere Intel-Macs. Im Zweifel: Apfel-Menü → „Über diesen Mac“.
+          2. `.dmg` öffnen und Pedalo in den Ordner „Programme“ ziehen.
+          3. **Erster Start:** Das Programm ist nicht von Apple beglaubigt. Rechtsklick auf Pedalo → „Öffnen“ → „Öffnen“ bestätigen. Zeigt macOS stattdessen „ist beschädigt“, im Terminal einmal `xattr -cr /Applications/Pedalo.app` eingeben.
+          4. Bluetooth erlauben, wenn macOS fragt.
+
+          Eine Anleitung steht in der App unter „Anleitung und Hilfe“.
+          EOF
+          gh release create "$TAG" mac/release/*.dmg mac/release/*.zip \
+            --title "Pedalo $TAG" --notes-file notes.md --target "$GITHUB_SHA" --latest

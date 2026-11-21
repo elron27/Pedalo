@@ -1,0 +1,39 @@
+{
+  "name": "pedalo-mac",
+  "productName": "Pedalo",
+  "version": "0.1.0",
+  "description": "Pedalo als Mac-Programm (Electron-Hülle um die Web-App)",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "prepare-app": "node prepare.mjs",
+    "start": "npm run prepare-app && electron .",
+    "dist": "npm run prepare-app && electron-builder --mac --publish never",
+    "test": "node smoke.test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "de.pedalo.app",
+    "productName": "Pedalo",
+    "directories": { "output": "release" },
+    "files": ["main.cjs", "dist/**/*", "package.json"],
+    "mac": {
+      "category": "public.app-category.sports",
+      "icon": "icon.png",
+      "identity": null,
+      "target": [
+        { "target": "dmg", "arch": ["arm64", "x64"] },
+        { "target": "zip", "arch": ["arm64", "x64"] }
+      ],
+      "extendInfo": {
+        "NSBluetoothAlwaysUsageDescription": "Pedalo verbindet sich mit deinem Bike und deinem Pulsgurt.",
+        "NSBluetoothPeripheralUsageDescription": "Pedalo verbindet sich mit deinem Bike und deinem Pulsgurt."
+      }
+    },
+    "artifactName": "Pedalo-${version}-${arch}.${ext}"
+  }
+}
