@@ -9,6 +9,8 @@ function log(kind: string, data?: unknown) {
   entries.push(e);
   logEl.textContent += `${(e.t / 1000).toFixed(1)}s ${kind} ${data === undefined ? '' : JSON.stringify(data)}\n`;
   logEl.scrollTop = logEl.scrollHeight;
+  // Live in docs/m0/live.jsonl mitschreiben (Dev-Server), damit Claude mitlesen kann
+  fetch('/__log', { method: 'POST', body: JSON.stringify(e), keepalive: true }).catch(() => {});
 }
 const hex = (d: DataView) =>
   Array.from(new Uint8Array(d.buffer, d.byteOffset, d.byteLength), (b) => b.toString(16).padStart(2, '0')).join(' ');
@@ -67,7 +69,6 @@ async function setupBike(dev: BluetoothDevice) {
     $('w').textContent = p.power?.toString() ?? '–';
     $('c').textContent = p.cadence?.toString() ?? '–';
     $('s').textContent = p.speedKmh?.toFixed(1) ?? '–';
-    $('bhr').textContent = p.hr?.toString() ?? '–';
     // Nicht jede Messung protokollieren: bei Sprung >= 10 W oder einmal je 5 s
     const sec = Math.floor(performance.now() / 5000);
     if (p.power !== undefined && (lastPower === undefined || Math.abs(p.power - lastPower) >= 10 || sec !== lastLogSecond)) {
@@ -127,6 +128,13 @@ $('reset').onclick = () => cp(0x01);
 $('setTarget').onclick = () => {
   const w = parseInt(($('target') as HTMLInputElement).value, 10);
   cp(0x05, [w & 0xff, (w >> 8) & 0xff]);
+};
+// FTMS 0x11: Indoor Bike Simulation Parameters (Wind 0,001 m/s, Steigung 0,01 %, Crr 0,0001, Cw 0,01 kg/m)
+$('setSim').onclick = () => {
+  const grade = parseFloat(($('grade') as HTMLInputElement).value);
+  const g = Math.round(grade * 100);
+  const wind = 0, crr = 40, cw = 51;
+  cp(0x11, [wind & 0xff, (wind >> 8) & 0xff, g & 0xff, (g >> 8) & 0xff, crr, cw]);
 };
 $('addNote').onclick = () => {
   const i = $('note') as HTMLInputElement;
