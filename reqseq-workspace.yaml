@@ -7,3 +7,6 @@ repositories:
 metamodel:
   repository: pedalo
   path: metamodel
+evidence:
+  - repository: pedalo
+    path: evidence
