@@ -9,6 +9,7 @@ import { Supervisor } from '../devices/supervisor';
 import { IcuClient, type IcuSkipped, type IcuWorkout } from '../icu/client';
 import type { Clock, ConnectionStatus, HeartRatePort, KeyValueStore, TrainerPort, WakeLockPort } from '../ports';
 import { T } from '../ui/texts';
+import { describeError } from './errors';
 
 export type RideKind = 'training' | 'frei' | 'rampe' | 'zwanzig' | 'vierdp';
 
@@ -126,7 +127,8 @@ export class Controller {
 
   private fail(e: unknown): void {
     console.error(e);
-    this.patch({ error: e instanceof Error ? e.message : String(e) });
+    const msg = describeError(e);
+    if (msg) this.patch({ error: msg });
   }
 
   clearMessages(): void {
@@ -277,7 +279,7 @@ export class Controller {
       const r = await this.d.makeIcu(acc).listRideWorkouts(from, to);
       this.patch({ icu: { loading: false, workouts: r.workouts, skipped: r.skipped } });
     } catch (e) {
-      this.patch({ icu: { loading: false, workouts: [], skipped: [], error: e instanceof Error ? e.message : String(e) } });
+      this.patch({ icu: { loading: false, workouts: [], skipped: [], error: describeError(e) ?? undefined } });
     }
   }
 

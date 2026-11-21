@@ -224,6 +224,38 @@ test.describe('Fahrer, Pulsgurte, Bibliothek', () => {
     await expect(page.getByLabel('intervals.icu Athlet-ID (optional)')).toHaveValue('iAnna');
   });
 
+  test('[SR-ff7b53/AK-rvkw] ein Fahrer ohne intervals.icu-Konto tippt Werte und Training von Hand ein und fährt, ohne Upload', async ({ page }) => {
+    await start(page);
+    await createProfile(page, 'Gast-Freund', '230'); // Profil ohne Konto
+    await page.getByRole('tab', { name: 'intervals.icu' }).click();
+    await expect(page.getByText('Dieses Profil hat kein intervals.icu-Konto.')).toBeVisible();
+    await startManual(page, '5:00 140\n5:00 200', 'Eigenes Training');
+    await expect(page.getByText('Eigenes Training')).toBeVisible();
+    await expect(page.locator('#restzeit .zahl')).toHaveText(/^\d:\d\d$/);
+    await page.getByRole('button', { name: 'Beenden' }).click();
+    await expect(page.getByRole('heading', { name: 'Fahrt beendet' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Zu intervals.icu hochladen' })).toHaveCount(0);
+  });
+
+  test('ein abgebrochenes Auswahlfenster ist kein Fehler, ein Verbindungsfehler erscheint auf Deutsch', async ({ page }) => {
+    await start(page);
+    await page.evaluate(() => {
+      (navigator.bluetooth as unknown as { requestDevice: () => Promise<never> }).requestDevice = async () => {
+        throw new DOMException('User cancelled the requestDevice() chooser.', 'NotFoundError');
+      };
+    });
+    await page.getByRole('button', { name: 'Bike koppeln' }).click();
+    await page.waitForTimeout(300);
+    await expect(page.getByRole('alert')).toHaveCount(0);
+    await page.evaluate(() => {
+      (navigator.bluetooth as unknown as { requestDevice: () => Promise<never> }).requestDevice = async () => {
+        throw new DOMException('Connection Error: Connection attempt failed.', 'NetworkError');
+      };
+    });
+    await page.getByRole('button', { name: 'Bike koppeln' }).click();
+    await expect(page.getByRole('alert')).toContainText('Verbindung zum Gerät fehlgeschlagen');
+  });
+
   test('[SR-a54eef/AK-nj88] ein gespeicherter Pulsgurt wird ohne erneutes Koppeln verbunden', async ({ page }) => {
     await start(page);
     await createProfile(page, 'Stefan', '274');
