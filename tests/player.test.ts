@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Player } from '../src/domain/player';
-import type { Workout } from '../src/domain/workout';
+import { remainingTotalSec, type Workout } from '../src/domain/workout';
 import { FakeClock, RecordingSink } from './helpers';
 
 const w: Workout = {
@@ -136,5 +136,39 @@ describe('Player', () => {
     p.start();
     await new Promise((r) => setTimeout(r, 0));
     expect(errors).toHaveLength(1);
+  });
+});
+
+describe('Restzeit des gesamten Trainings', () => {
+  const seventy: Workout = {
+    name: '70 Minuten',
+    blocks: [
+      { label: 'a', durationSec: 1200, watts: 100 },
+      { label: 'b', durationSec: 3000, watts: 200 },
+    ],
+  };
+  const rest = (p: Player, wo: Workout) => {
+    const st = p.state();
+    return remainingTotalSec(wo, st.blockIndex, st.blockRemainingSec);
+  };
+
+  it('[SR-2eaedc/AK-xnf9] 70 Minuten Training: nach 10 Minuten 60:00 Rest, in der Pause steht sie still, mit offenem Block „offen“', () => {
+    const { p, run } = setup(seventy);
+    p.start();
+    expect(rest(p, seventy)).toBe(4200);
+    run(600);
+    expect(rest(p, seventy)).toBe(3600);
+    p.pause();
+    run(300);
+    expect(rest(p, seventy)).toBe(3600);
+    p.resume();
+    run(60);
+    expect(rest(p, seventy)).toBe(3540);
+    p.skip(); // Sprung in den nächsten Block: Rest ist die Dauer dieses Blocks
+    expect(rest(p, seventy)).toBe(3000);
+
+    const { p: q } = setup(w);
+    q.start();
+    expect(rest(q, w)).toBe(null); // Block c ist offen
   });
 });

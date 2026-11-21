@@ -1,4 +1,5 @@
 import type { KeyValueStore } from '../ports';
+import type { HrZones } from './zones';
 
 export interface HrStrap {
   /** Geräte-ID des Browsers (Web Bluetooth). */
@@ -18,6 +19,8 @@ export interface Profile {
   icu?: IcuAccount;
   hrStraps: HrStrap[];
   selectedStrapId?: string;
+  /** Zuletzt aus intervals.icu gelesene Pulszonen (gilt auch ohne Netz). */
+  hrZones?: HrZones;
 }
 
 const KEY = 'profile/';

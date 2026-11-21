@@ -57,6 +57,8 @@ export const T = {
   trittfrequenz: 'Trittfrequenz',
   blockRestzeit: 'Restzeit Block',
   gesamtzeit: 'Gesamtzeit',
+  restzeitGesamt: 'Restzeit gesamt',
+  zone: 'Zone',
   ziel: 'Ziel',
   offen: 'offen',
   naechsterBlock: 'Nächster Block',

@@ -6,6 +6,7 @@ import { addStrap, newId, ProfileStore, riderContext, selectStrap, type Profile,
 import { deleteRecording, listSessions, Recorder, recoverRecording, type Latest, type RecordSample, type Recording, type SessionMeta } from '../domain/recorder';
 import { parseManualBlocks, type Workout } from '../domain/workout';
 import { Supervisor } from '../devices/supervisor';
+import type { HrZones } from '../domain/zones';
 import { IcuClient, type IcuSkipped, type IcuWorkout } from '../icu/client';
 import type { Clock, ConnectionStatus, HeartRatePort, KeyValueStore, TrainerPort, WakeLockPort } from '../ports';
 import { T } from '../ui/texts';
@@ -40,6 +41,7 @@ export interface AppState {
   workout: Workout | null;
   player: PlayerState | null;
   library: LibraryEntry[];
+  hrZones?: HrZones | undefined;
   icu: { loading: boolean; workouts: IcuWorkout[]; skipped: IcuSkipped[]; error?: string };
   unfinished: SessionMeta[];
   recent: SessionMeta[];
@@ -346,12 +348,27 @@ export class Controller {
       });
       this.player.onChange((ps) => this.onPlayerChange(ps));
       this.d.log?.('fahrt.start', { kind, training: w?.name, bloecke: w?.blocks.length });
-      this.patch({ screen: 'fahrt', rideKind: kind, workout: w, result: undefined, error: undefined });
+      this.patch({ screen: 'fahrt', rideKind: kind, workout: w, result: undefined, error: undefined, hrZones: rider.profile?.hrZones });
+      void this.refreshHrZones();
       void this.d.wake.acquire().catch((e) => this.fail(e));
       this.player.start();
       this.nextRecordAt = this.d.clock.now() + 1000;
       this.timer = setInterval(() => this.onTimer(), 250);
     });
+  }
+
+  /** Pulszonen aus intervals.icu auffrischen; ohne Konto oder bei Fehlern bleiben die zuletzt gespeicherten. */
+  private async refreshHrZones(): Promise<void> {
+    const p = this.rider().profile;
+    if (!p?.icu) return;
+    try {
+      const zones = await this.d.makeIcu(p.icu).getHrZones();
+      if (!zones) return;
+      if (this.s.active?.id === p.id) this.patch({ hrZones: zones });
+      await this.d.profiles.save({ ...p, hrZones: zones });
+    } catch (e) {
+      this.d.log?.('pulszonen.fehler', String(e));
+    }
   }
 
   private onPlayerChange(ps: PlayerState): void {

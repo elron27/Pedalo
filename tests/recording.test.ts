@@ -41,6 +41,22 @@ describe('Aufzeichnung', () => {
     expect(r.records[0]).not.toHaveProperty('heartRate');
   });
 
+  it('[SR-f32bce/AK-kv6q] schreibt Distanz und Geschwindigkeit je Datensatz sowie Gesamtdistanz, mittlere und höchste Geschwindigkeit passend zur Aufzeichnung', () => {
+    const r = new Recorder(info);
+    for (let i = 0; i < 100; i++) r.tick({ power: 150, speedKmh: i < 50 ? 30 : 36 });
+    const { messages, errors } = decode(buildFit({ meta: r.meta(true), records: r.records }));
+    expect(errors).toHaveLength(0);
+    const recs = messages.recordMesgs!;
+    expect(recs.every((x) => typeof x.distance === 'number' && typeof x.speed === 'number')).toBe(true);
+    const expectedDist = (50 * 30 + 50 * 36) / 3.6; // Meter
+    const ses = messages.sessionMesgs![0]! as Record<string, number>;
+    expect(Math.abs(ses.totalDistance! - expectedDist) / expectedDist).toBeLessThan(0.01);
+    expect(Math.abs(recs.at(-1)!.distance! - expectedDist) / expectedDist).toBeLessThan(0.01);
+    const avgMs = (50 * 30 + 50 * 36) / 100 / 3.6;
+    expect(Math.abs((ses.avgSpeed ?? ses.enhancedAvgSpeed)! - avgMs) / avgMs).toBeLessThan(0.01);
+    expect(Math.abs((ses.maxSpeed ?? ses.enhancedMaxSpeed)! - 36 / 3.6) / (36 / 3.6)).toBeLessThan(0.01);
+  });
+
   it('bewältigt die Höchstdauer von 10 Stunden (36.000 Datensätze) in einer gültigen Datei', () => {
     const r = recordSeconds(36_000);
     expect(r.records).toHaveLength(36_000);

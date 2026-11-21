@@ -2,7 +2,8 @@ import { useEffect, useState } from 'preact/hooks';
 import type { AppState, Controller } from '../app/controller';
 import { buildChart } from '../domain/chart';
 import type { RecordSample } from '../domain/recorder';
-import { totalDurationSec, workoutProfile, type Workout } from '../domain/workout';
+import { remainingTotalSec, totalDurationSec, workoutProfile, type Workout } from '../domain/workout';
+import { zoneOf } from '../domain/zones';
 import { fmtTime, T } from './texts';
 
 function useAppState(c: Controller): AppState {
@@ -361,6 +362,8 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
   const free = p?.status === 'frei';
   const hasWorkout = Boolean(s.workout);
   const w = s.workout;
+  const zone = zoneOf(s.live.heartRate, s.hrZones);
+  const remaining = w && p ? remainingTotalSec(w, p.blockIndex, p.blockRemainingSec) : null;
   return (
     <div class="fahrt">
       <div class="kopf">
@@ -376,9 +379,10 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
       {free && hasWorkout && <div class="banner">{T.imFreienTraining}</div>}
       <div class="werte">
         <Tile label={T.watt} value={s.live.power} sub={p?.targetWatts != null ? `${T.ziel} ${p.targetWatts}` : undefined} id="watt" />
-        <Tile label={T.puls} value={s.live.heartRate} id="puls" />
+        <Tile label={T.puls} value={s.live.heartRate} id="puls" sub={zone ? `${T.zone} ${zone}` : undefined} cls={zone ? `z${Math.min(zone, 7)}` : undefined} />
         <Tile label={T.trittfrequenz} value={s.live.cadence !== undefined ? Math.round(s.live.cadence) : undefined} id="trittfrequenz" />
         <Tile label={T.blockRestzeit} text={hasWorkout && !free ? (p?.blockRemainingSec === null ? T.offen : fmtTime(p?.blockRemainingSec)) : '–'} id="restzeit" zeit />
+        <Tile label={T.restzeitGesamt} text={hasWorkout && !free ? (remaining === null ? T.offen : fmtTime(remaining)) : '–'} id="restzeit-gesamt" zeit />
         <Tile label={T.gesamtzeit} text={fmtTime(p?.totalElapsedSec ?? 0)} id="gesamtzeit" zeit />
       </div>
       <Verlauf records={c.records()} plannedSec={w ? (totalDurationSec(w) ?? undefined) : undefined} />
@@ -415,9 +419,9 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
   );
 }
 
-function Tile({ label, value, text, sub, id, zeit }: { label: string; value?: number | undefined; text?: string; sub?: string; id: string; zeit?: boolean }) {
+function Tile({ label, value, text, sub, id, zeit, cls }: { label: string; value?: number | undefined; text?: string; sub?: string; id: string; zeit?: boolean; cls?: string }) {
   return (
-    <div class={zeit ? 'kachel zeit' : 'kachel'} id={id}>
+    <div class={`${zeit ? 'kachel zeit' : 'kachel'}${cls ? ' ' + cls : ''}`} id={id}>
       <div class="beschriftung">{label}</div>
       <div class="zahl">{text ?? (value === undefined ? '–' : String(value))}</div>
       {sub && <div class="unter">{sub}</div>}

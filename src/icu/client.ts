@@ -1,3 +1,4 @@
+import { hrZonesFromAthlete, type HrZones } from '../domain/zones';
 import { workoutFromIntervalsDoc, WorkoutParseError, type IcuWorkoutDoc, type Workout } from '../domain/workout';
 
 export interface IcuConfig {
@@ -82,6 +83,13 @@ export class IcuClient {
     }
     workouts.sort((a, b) => a.date.localeCompare(b.date));
     return { workouts, skipped };
+  }
+
+  /** Pulszonen des Athleten (undefined, wenn intervals.icu keine liefert). */
+  async getHrZones(): Promise<HrZones | undefined> {
+    const r = await this.f(`${this.base}/athlete/${encodeURIComponent(this.cfg.athleteId)}`, { headers: this.headers() });
+    await this.check(r, 'Pulszonen lesen');
+    return hrZonesFromAthlete(await r.json());
   }
 
   /** .fit-Datei als Aktivität auf das Konto dieses Fahrers hochladen. */

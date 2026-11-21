@@ -107,3 +107,15 @@ export function parseManualBlocks(name: string, text: string): Workout {
   if (blocks.length === 0) throw new WorkoutParseError('Keine Blöcke eingegeben.');
   return { name, blocks };
 }
+
+/** Verbleibende Dauer des gesamten Trainings ab dem laufenden Block; null, sobald ein offener Block folgt oder läuft. */
+export function remainingTotalSec(w: Workout, blockIndex: number, blockRemainingSec: number | null): number | null {
+  if (blockRemainingSec === null) return null;
+  let sum = blockRemainingSec;
+  for (let i = blockIndex + 1; i < w.blocks.length; i++) {
+    const d = w.blocks[i]!.durationSec;
+    if (d === null) return null;
+    sum += d;
+  }
+  return sum;
+}

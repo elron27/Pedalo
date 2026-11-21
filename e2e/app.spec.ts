@@ -287,6 +287,57 @@ test.describe('Fahrer, Pulsgurte, Bibliothek', () => {
   });
 });
 
+test.describe('Pulszone und Gesamt-Restzeit auf dem Fahrtbildschirm', () => {
+  const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' };
+
+  test('[SR-215ffb/AK-d38m] unter dem Puls steht die Zone aus intervals.icu und die Kachel ist eingefärbt; ohne Konto keine Zone', async ({ page }) => {
+    await page.route('https://intervals.icu/**', async (route) => {
+      if (route.request().method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
+      return route.fulfill({
+        status: 200,
+        headers: cors,
+        contentType: 'application/json',
+        body: JSON.stringify({ sportSettings: [{ types: ['Ride'], hr_zones: [111, 130, 148, 158, 168, 178, 190] }] }),
+      });
+    });
+    await start(page);
+    await page.getByRole('button', { name: 'Neues Profil' }).click();
+    await page.getByLabel('Name', { exact: true }).fill('Stefan');
+    await page.getByLabel('FTP (Watt)', { exact: true }).fill('274');
+    await page.getByLabel('intervals.icu Athlet-ID (optional)').fill('i123');
+    await page.getByLabel('intervals.icu API-Schlüssel (optional)').fill('geheim');
+    await page.getByRole('button', { name: 'Speichern' }).click();
+    await page.getByRole('button', { name: 'Pulsgurt koppeln' }).click();
+    await expect(gurtStatus(page)).toHaveText('verbunden');
+    await startManual(page, '10:00 150');
+    await call(page, "f.hrEmit('gurt1', 150)");
+    await expect(page.locator('#puls .unter')).toHaveText('Zone 4');
+    await expect(page.locator('#puls')).toHaveClass(/\bz4\b/);
+    await call(page, "f.hrEmit('gurt1', 105)");
+    await expect(page.locator('#puls .unter')).toHaveText('Zone 1');
+    await expect(page.locator('#puls')).toHaveClass(/\bz1\b/);
+    await page.getByRole('button', { name: 'Beenden' }).click();
+    await page.getByRole('button', { name: 'Zurück zum Start' }).click();
+    // Gast: keine Zonengrenzen, also keine Zone
+    await page.getByRole('combobox', { name: /^Fahrer/ }).selectOption('');
+    await startManual(page, '10:00 150');
+    await call(page, "f.hrEmit('gurt1', 150)");
+    await expect(page.locator('#puls .zahl')).toHaveText('150');
+    await expect(page.locator('#puls .unter')).toHaveCount(0);
+  });
+
+  test('[SR-2eaedc/AK-xnf9] zeigt die Restzeit des gesamten Trainings, bei offenem Block „offen“', async ({ page }) => {
+    await start(page);
+    await pairBike(page);
+    await startManual(page, '10:00 150\n60:00 150');
+    await expect(page.locator('#restzeit-gesamt .zahl')).toHaveText(/^1:(09:5\d|10:00)$/);
+    await page.getByRole('button', { name: 'Beenden' }).click();
+    await page.getByRole('button', { name: 'Zurück zum Start' }).click();
+    await startManual(page, '10:00 150\noffen 120');
+    await expect(page.locator('#restzeit-gesamt .zahl')).toHaveText('offen');
+  });
+});
+
 test.describe('intervals.icu', () => {
   const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' };
 
@@ -373,7 +424,7 @@ test.describe('Darstellung', () => {
     await expect(page.locator('#watt .zahl')).toHaveText('1234');
     for (const w of [400, 700, 1100, 1920]) {
       await page.setViewportSize({ width: w, height: 1000 });
-      for (const id of ['watt', 'puls', 'trittfrequenz', 'restzeit', 'gesamtzeit']) {
+      for (const id of ['watt', 'puls', 'trittfrequenz', 'restzeit', 'restzeit-gesamt', 'gesamtzeit']) {
         const r = await page.locator(`#${id} .zahl`).evaluate((e) => ({ scroll: e.scrollWidth, client: e.clientWidth }));
         expect(r.scroll, `${id} bei ${w}px`).toBeLessThanOrEqual(r.client);
       }

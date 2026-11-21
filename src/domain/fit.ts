@@ -23,8 +23,11 @@ function stats(recs: Recording['records']) {
   const power = recs.flatMap((r) => (r.power === undefined ? [] : [r.power]));
   const hr = recs.flatMap((r) => (r.heartRate === undefined ? [] : [r.heartRate]));
   const cad = recs.flatMap((r) => (r.cadence === undefined ? [] : [r.cadence]));
+  const speeds = recs.flatMap((r) => (r.speedKmh === undefined ? [] : [r.speedKmh / 3.6]));
   const dist = recs.reduce((a, r) => a + (r.speedKmh ?? 0) / 3.6, 0); // m bei 1 Hz
   return {
+    avgSpeed: avg(speeds),
+    maxSpeed: max(speeds),
     avgPower: round(avg(power)),
     maxPower: max(power),
     avgHr: round(avg(hr)),
@@ -85,6 +88,8 @@ export function buildFit(rec: Recording): Uint8Array {
       avgCadence: s.avgCad,
       maxCadence: s.maxCad,
       totalDistance: s.dist,
+      avgSpeed: s.avgSpeed,
+      maxSpeed: s.maxSpeed,
     });
   });
 
@@ -107,6 +112,8 @@ export function buildFit(rec: Recording): Uint8Array {
     avgCadence: s.avgCad,
     maxCadence: s.maxCad,
     totalDistance: s.dist,
+    avgSpeed: s.avgSpeed,
+    maxSpeed: s.maxSpeed,
     thresholdPower: meta.ftp,
   });
   put('ACTIVITY', {

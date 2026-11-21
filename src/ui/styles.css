@@ -174,8 +174,17 @@ strong[data-status='getrennt'] {
   min-width: 0;
 }
 .kachel.zeit {
-  grid-column: span 3;
+  grid-column: span 2;
 }
+/* Pulszonen Z1 bis Z7 */
+.kachel.z1 { background: #3a4550; }
+.kachel.z2 { background: #1f6b4a; }
+.kachel.z3 { background: #4d7a1f; }
+.kachel.z4 { background: #8a7a12; }
+.kachel.z5 { background: #9a5a12; }
+.kachel.z6 { background: #9a2f2f; }
+.kachel.z7 { background: #7a2a6a; }
+.kachel[class*=' z'] .unter { color: #fff; }
 .kachel .beschriftung {
   color: var(--gedaempft);
   font-size: 22px;
