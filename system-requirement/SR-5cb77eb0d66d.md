@@ -8,7 +8,7 @@ acceptance-criteria:
   - key: nbbk
     text: Die erzeugte .fit-Datei lässt sich in intervals.icu und Strava importieren.
 derives-from:
-  - { id: ac68491a-8f31-4029-bed4-ae5e447c9165, version: n2:4cc92e80b217d4f3, title: Eigene Trainingssoftware statt ICTrainer }
+  - { id: 19841055-e735-4b35-8b44-7676f5da1c33, version: n2:a3a3c258df7582fa, title: Training auswerten und hochladen }
 ---
 
 Export: .fit lokal speichern und Upload zu intervals.icu. (Ursprüngliche ID im Requirements-Dokument: REQ-C-005)

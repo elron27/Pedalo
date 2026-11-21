@@ -8,7 +8,7 @@ acceptance-criteria:
   - key: h703
     text: Annahme Windows (unbestätigt). Die App läuft in aktuellem Chrome und Edge ohne Installation.
 derives-from:
-  - { id: ac68491a-8f31-4029-bed4-ae5e447c9165, version: n2:4cc92e80b217d4f3, title: Eigene Trainingssoftware statt ICTrainer }
+  - { id: 88bb1128-2c6a-43ee-ac03-2ea03f90dc68, version: n2:74d8148b80d44597, title: Plattform und Sprache }
 ---
 
 Plattform: Web-App in Chrome oder Edge auf dem PC. (Ursprüngliche ID im Requirements-Dokument: REQ-C-001)

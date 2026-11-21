@@ -8,7 +8,7 @@ acceptance-criteria:
   - key: y7fv
     text: Pro Sekunde wird ein Datensatz mit Watt, Puls und Trittfrequenz gespeichert.
 derives-from:
-  - { id: ac68491a-8f31-4029-bed4-ae5e447c9165, version: n2:4cc92e80b217d4f3, title: Eigene Trainingssoftware statt ICTrainer }
+  - { id: c826e6f8-2592-4629-bf3c-1e879bee7ec7, version: n2:f7ebe0b72fc33674, title: Training aufzeichnen und sicher speichern }
 ---
 
 Watt, Puls und Trittfrequenz im Sekundentakt aufzeichnen. (Ursprüngliche ID im Requirements-Dokument: REQ-F-040)

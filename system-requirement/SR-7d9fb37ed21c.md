@@ -8,7 +8,7 @@ acceptance-criteria:
   - key: zvs5
     text: Eine Prozentänderung wirkt auf den aktuellen und alle noch folgenden Blöcke.
 derives-from:
-  - { id: ac68491a-8f31-4029-bed4-ae5e447c9165, version: n2:4cc92e80b217d4f3, title: Eigene Trainingssoftware statt ICTrainer }
+  - { id: cbff42bd-f3da-484f-a16f-e793354675b0, version: n2:4823169e575aa6f8, title: Ein Training durchfahren }
 ---
 
 Intensität live in Prozent für alle folgenden Blöcke anpassen. (Ursprüngliche ID im Requirements-Dokument: REQ-F-015)
