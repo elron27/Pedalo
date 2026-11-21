@@ -11,10 +11,13 @@ Web-App, lokal auf dem PC, Chrome als Referenz (Windows und Mac), Oberfläche au
   intervals.icu ohne Proxy, Watt wie im Training, 4DP-Ablauf).
 - Code: M2 bis M5 gebaut (Kern in `src/domain`, Geräte in `src/devices`, intervals.icu in `src/icu`, Oberfläche in `src/ui`
   mit Preact, Steuerung in `src/app`). Plan und Testkonzept: `docs/umsetzungsplan.md`.
+- Start ohne Claude: `Pedalo-starten.cmd` oder `npm start` (Produktionsbuild auf http://localhost:5173, siehe README).
+- Neu seit der ersten ganzen Fahrt (2026-11-21): Gesamt-Restzeit (SR-2eaedc), Pulszonen aus intervals.icu (SR-215ffb, Annahme:
+  `sportSettings[].hr_zones` im Athleten-Abruf, am echten Konto noch nicht geprüft), Geschwindigkeit/Distanz in der .fit (SR-f32bce).
 - Tests: `npm test` (Vitest), `npm run test:e2e` (Playwright mit simuliertem Bike), `npm run test:evidence` schreibt Nachweise.
-  31 von 36 SRs verifiziert. Offen sind nur Hardware-Fälle für M6 (SR-f83db7, SR-f22ac4, SR-b0d66d, SR-988963, SR-fa0d80).
-- **Nächste Aufgabe: M6 (Abnahme am echten Bike)** nach `docs/m6-abnahme.md`. Nach Rückmeldung von Stefan die Nachweise
-  mit `reqseq evidence record … --method demonstration` eintragen, nur für Bestätigtes. Needs validiert Stefan selbst.
+  35 von 40 SRs verifiziert. Offen sind nur Hardware-Fälle (SR-f83db7, SR-f22ac4, SR-b0d66d, SR-988963, SR-fa0d80).
+- **Nächste Aufgabe: M6 abschließen** nach `docs/m6-abnahme.md`: Rückmeldung von Stefan (Pause per 0 W, Wiederverbindung, Strava
+  zählt Distanz, Mac), dann Nachweise mit `reqseq evidence record … --method demonstration` nur für Bestätigtes. Needs validiert Stefan selbst.
 
 ## Regeln
 
