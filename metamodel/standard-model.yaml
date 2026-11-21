@@ -22,7 +22,7 @@ types:
         source-identifier,
         import-date,
         delivery,
-        import-version,
+        import-version, man-soll-mehrere-puls-gurte-verbinden-koennen,
       ]
     required: [title]
   - key: use-case
@@ -208,6 +208,9 @@ properties:
       kind: text,
       description: "The topic the element belongs to, as the project names its topics.",
     }
+  - key: man-soll-mehrere-puls-gurte-verbinden-koennen
+    name: Man soll mehrere puls gurte verbinden können
+    kind: text
 
 relations:
   - key: refines
