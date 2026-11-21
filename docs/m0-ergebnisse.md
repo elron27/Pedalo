@@ -27,3 +27,19 @@ Grundlage: Protokoll `docs/m0/protokoll-2026-11-21-lauf1.json` (lokal, nicht im 
 ## Folgen für die Requirements
 - **SR-f073cf (freies Training)** geändert: Statt „App setzt keine Zielwatt“ sendet sie Simulationswerte (Steigung 0 %). Annahme bleibt unbestätigt, bis der Test mit dem Simulationsknopf es zeigt.
 - **SR-74122b (Pause)**: nach dem Test mit Zielleistung bei Pause neu prüfen (noch nicht geändert).
+
+## Lauf 2 (2026-11-21, live mitgeschrieben in `docs/m0/live.jsonl`)
+
+**Freies Training mit Simulationswerten: bestätigt.**
+- Befehl `11 00 00 00 00 28 33` (Wind 0, Steigung 0 %, Crr 0,004, Cw 0,51) wird mit `80 11 01` bestätigt, **auch ohne „Steuerung anfordern“**.
+- Mit Simulation wirkt das Schalten: Die Geschwindigkeit je Trittfrequenz stieg im Lauf der Schaltvorgänge von etwa 0,20 km/h je U/min (14,2 km/h bei 71,5 U/min) auf etwa 0,60 (32 km/h bei 53 U/min). Bei der niedrigen Trittfrequenz lag die Leistung bei 430 bis 515 W (Spitzen enthalten Beschleunigung), im niedrigen Gang bei 20 W im Beharrungszustand (16,7 km/h, 83 U/min).
+- Ohne Simulationswerte (Lauf 1) blieb das Bike bei 30 bis 40 W, Schalten wirkte nicht.
+- Im Protokoll stehen nur zwei Notizen („gang hoch“). Die genaue Zahl der Schaltvorgänge ist nicht belegt, die Wirkung ist es.
+- Ausrollen: Ohne Treten sinkt die virtuelle Geschwindigkeit langsam (etwa 36 auf 18 km/h in 20 s).
+- Wechsel von Zielwatt (ERG, 100 W) auf Simulation klappt ohne Zwischenschritt. Die virtuelle Geschwindigkeit wird dabei übernommen (Sprung auf rund 40 km/h).
+
+**Verbinden:** Der erste Verbindungsversuch scheiterte (`NetworkError: Connection attempt failed`), „Neu verbinden“ ohne Geräteauswahl klappte danach in 3,7 s. Ein Abbruch **während** der Fahrt kam nicht vor, SR-1a292f ist weiter ungetestet. Folge: Die App braucht einen Wiederholungsversuch schon beim ersten Verbinden.
+
+**Pulsgurt:** Sigma HRM lief durchgehend (72 bis 130 bpm, passend zur Belastung).
+
+**Weiterhin offen:** intervals.icu (Lesen, Upload, CORS, Blockstruktur), Abbruch während der Fahrt, Pause per Zielleistung.
