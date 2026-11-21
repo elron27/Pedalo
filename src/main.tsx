@@ -37,3 +37,8 @@ const controller = new Controller({
 // Zwischengespeichertes vor dem Schließen des Tabs sichern (die Aufzeichnung schreibt ohnehin alle 5 s).
 render(<App c={controller} />, document.getElementById('app')!);
 void controller.init();
+
+// Offline-Start als installierte App (nicht im Entwicklungsmodus und nicht unter Testautomatisierung).
+if (import.meta.env.PROD && 'serviceWorker' in navigator && !navigator.webdriver) {
+  navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('Offline-Start nicht verfügbar', e));
+}
