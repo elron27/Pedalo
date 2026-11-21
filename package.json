@@ -13,6 +13,7 @@
     "ak-refs": "node tools/ak-refs.mjs"
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
     "@types/web-bluetooth": "^0.0.22",
     "typescript": "^7.0.2",
     "vite": "^8.3.8",

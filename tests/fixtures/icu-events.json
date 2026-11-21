@@ -1,0 +1,96 @@
+[
+  {
+    "id": 154337317,
+    "name": "Sweet spot 2×20′",
+    "type": "Ride",
+    "category": "WORKOUT",
+    "start_date_local": "2026-11-21T00:00:00",
+    "icu_ftp": 274,
+    "workout_doc": {
+      "steps": [
+        { "text": "Einfahren", "power": { "units": "w", "value": 151, "target": "3s" }, "duration": 600 },
+        { "text": "Aufbau", "power": { "units": "w", "value": 206, "target": "3s" }, "duration": 300 },
+        {
+          "reps": 2,
+          "text": "2x",
+          "steps": [
+            { "text": "Sweetspot", "power": { "units": "w", "value": 250, "target": "3s" }, "duration": 1200 },
+            { "text": "locker", "power": { "units": "w", "value": 151, "target": "3s" }, "duration": 300 }
+          ],
+          "distance": 0,
+          "duration": 3000
+        },
+        { "text": "Ausfahren", "power": { "units": "w", "value": 124, "target": "3s" }, "duration": 300 }
+      ],
+      "duration": 4200
+    }
+  },
+  {
+    "id": 154337320,
+    "name": "Z2-Ausfahrt ~100′",
+    "type": "Ride",
+    "category": "WORKOUT",
+    "start_date_local": "2026-11-22T00:00:00",
+    "icu_ftp": 274,
+    "workout_doc": {
+      "steps": [
+        { "text": "Einfahren", "power": { "units": "w", "value": 151, "target": "3s" }, "duration": 600 },
+        { "power": { "units": "w", "value": 179, "target": "3s" }, "duration": 5400 }
+      ],
+      "duration": 6000
+    }
+  },
+  {
+    "id": 157350670,
+    "name": "Gym A: Kniebeuge, Bank, Rudern",
+    "type": "WeightTraining",
+    "category": "WORKOUT",
+    "start_date_local": "2026-11-23T00:00:00",
+    "workout_doc": { "steps": [], "duration": 0, "description": "4 exercises · 12 sets" }
+  },
+  {
+    "id": 157350676,
+    "name": "Entlastung: Sweet spot 2×10′ + Sprints",
+    "type": "Ride",
+    "category": "WORKOUT",
+    "start_date_local": "2026-11-24T00:00:00",
+    "icu_ftp": 274,
+    "workout_doc": {
+      "steps": [
+        { "text": "Einfahren", "power": { "units": "w", "value": 151, "target": "3s" }, "duration": 600 },
+        { "text": "Steigerung", "power": { "units": "w", "value": 206, "target": "3s" }, "duration": 300 },
+        {
+          "reps": 2,
+          "text": "2x",
+          "steps": [
+            { "text": "Sweet spot", "power": { "units": "w", "value": 250, "target": "3s" }, "duration": 600 },
+            { "text": "Pause", "power": { "units": "w", "value": 151, "target": "3s" }, "duration": 300 }
+          ],
+          "duration": 1800
+        },
+        {
+          "reps": 6,
+          "text": "6x",
+          "steps": [
+            { "text": "Sprint", "power": { "units": "w", "value": 798, "target": "3s" }, "duration": 10 },
+            { "text": "locker", "power": { "units": "w", "value": 138, "target": "3s" }, "duration": 110 }
+          ],
+          "duration": 720
+        },
+        { "text": "Ausfahren", "power": { "units": "w", "value": 124, "target": "3s" }, "duration": 300 }
+      ],
+      "duration": 3720
+    }
+  },
+  {
+    "id": 157350678,
+    "name": "Lauf locker 30′",
+    "type": "Run",
+    "category": "WORKOUT",
+    "start_date_local": "2026-11-25T19:00:00",
+    "workout_doc": {
+      "steps": [{ "hr": { "end": 63, "start": 51, "units": "%hr" }, "text": "locker laufen", "duration": 1800 }],
+      "duration": 1800
+    }
+  }
+]

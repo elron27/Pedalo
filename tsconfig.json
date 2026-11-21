@@ -7,8 +7,9 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "noEmit": true,
-    "types": ["vite/client", "web-bluetooth"]
+    "types": ["vite/client", "web-bluetooth", "node"]
   },
   "include": ["src", "tests", "spike"]
 }
