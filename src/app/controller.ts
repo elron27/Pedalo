@@ -96,8 +96,29 @@ export class Controller {
   private lastLapIndex = -1;
 
   constructor(private readonly d: Deps) {
-    this.trainerSup = new Supervisor(d.trainer, { onError: (e) => this.fail(e) });
-    this.hrSup = new Supervisor(d.hr, { onError: (e) => this.fail(e) });
+    // Bei wiederholten Verbindungsversuchen nur den ersten Fehlschlag als Meldung zeigen, die weiteren stehen im Protokoll.
+    const quiet = () => {
+      let streak = 0;
+      return {
+        err: (e: unknown) => {
+          streak += 1;
+          if (streak === 1) this.fail(e);
+          else {
+            console.warn('Verbindungsversuch fehlgeschlagen', e);
+            this.d.log?.('verbindung.wiederholt', { versuch: streak, fehler: String(e) });
+          }
+        },
+        reset: () => {
+          streak = 0;
+        },
+      };
+    };
+    const t = quiet();
+    const h = quiet();
+    this.trainerSup = new Supervisor(d.trainer, { onError: t.err });
+    this.hrSup = new Supervisor(d.hr, { onError: h.err });
+    this.trainerSup.onConnected(() => t.reset());
+    this.hrSup.onConnected(() => h.reset());
     this.trainerSup.onStatus((t) => {
       d.log?.('status.bike', t);
       this.patch({ trainer: t });
