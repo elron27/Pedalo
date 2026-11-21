@@ -3,7 +3,7 @@ import { fourDpResult, ftpFromRamp, ftpFromTwentyMinuteTest, rampWorkout, riderS
 import { Library, type LibraryEntry } from '../domain/library';
 import { Player, type PlayerState } from '../domain/player';
 import { addStrap, newId, ProfileStore, riderContext, selectStrap, type Profile, type RiderContext, type StrapConnector } from '../domain/profile';
-import { deleteRecording, listSessions, Recorder, recoverRecording, type Latest, type Recording, type SessionMeta } from '../domain/recorder';
+import { deleteRecording, listSessions, Recorder, recoverRecording, type Latest, type RecordSample, type Recording, type SessionMeta } from '../domain/recorder';
 import { parseManualBlocks, type Workout } from '../domain/workout';
 import { Supervisor } from '../devices/supervisor';
 import { IcuClient, type IcuSkipped, type IcuWorkout } from '../icu/client';
@@ -33,6 +33,8 @@ export interface AppState {
   hr: ConnectionStatus;
   trainerName?: string;
   live: Latest;
+  /** Anzahl aufgezeichneter Sekunden (für die Aktualisierung des Diagramms). */
+  seconds: number;
   screen: 'start' | 'fahrt' | 'ende';
   rideKind: RideKind;
   workout: Workout | null;
@@ -73,6 +75,7 @@ export class Controller {
     trainer: 'getrennt',
     hr: 'getrennt',
     live: {},
+    seconds: 0,
     screen: 'start',
     rideKind: 'frei',
     workout: null,
@@ -371,6 +374,7 @@ export class Controller {
       cadence: this.fresh(this.lastTrainerAt, r.cadence),
       speedKmh: this.fresh(this.lastTrainerAt, r.speedKmh),
       heartRate: this.fresh(this.lastHrAt, r.heartRate),
+      target: this.player?.state().targetWatts ?? undefined,
     };
   }
 
@@ -384,8 +388,13 @@ export class Controller {
       this.nextRecordAt += 1000;
       recorded = true;
     }
-    this.patch({ live: this.latest() });
+    this.patch({ live: this.latest(), seconds: this.recorder?.records.length ?? this.s.seconds });
     if (recorded && this.s.rideKind === 'rampe' && riderStopped(this.cadences)) void this.finishRide();
+  }
+
+  /** Aufgezeichnete Datensätze der laufenden Fahrt (für das Diagramm). */
+  records(): RecordSample[] {
+    return this.recorder?.records ?? [];
   }
 
   pause(): void {
@@ -440,7 +449,7 @@ export class Controller {
         result.fourDp = fourDpResult(powers);
         result.ftpSuggestion = result.fourDp.ftpSuggestion;
       }
-      this.patch({ screen: 'ende', result, player: null, live: {} });
+      this.patch({ screen: 'ende', result, player: null, live: {}, seconds: 0 });
       await this.reloadSessions();
     });
   }

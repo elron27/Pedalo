@@ -8,6 +8,8 @@ export interface RecordSample {
   heartRate?: number;
   cadence?: number;
   speedKmh?: number;
+  /** Zielleistung (Watt), die zu diesem Zeitpunkt am Bike stand; fehlt im freien Training. */
+  target?: number;
 }
 
 export interface LapMark {

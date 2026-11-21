@@ -74,6 +74,12 @@ export const T = {
   vollbild: 'Vollbild',
   imPause: 'Pause',
   imFreienTraining: 'Freies Training',
+  verlauf: 'Verlauf',
+  legendeLeistung: 'Leistung',
+  legendeZiel: 'Zielleistung',
+  legendePuls: 'Puls',
+  legendeTrittfrequenz: 'Trittfrequenz',
+  minuteKurz: 'min',
   // Ende
   fahrtBeendet: 'Fahrt beendet',
   dauer: 'Dauer',

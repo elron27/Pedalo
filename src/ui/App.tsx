@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { AppState, Controller } from '../app/controller';
-import { workoutProfile, type Workout } from '../domain/workout';
+import { buildChart } from '../domain/chart';
+import type { RecordSample } from '../domain/recorder';
+import { totalDurationSec, workoutProfile, type Workout } from '../domain/workout';
 import { fmtTime, T } from './texts';
 
 function useAppState(c: Controller): AppState {
@@ -379,6 +381,7 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
         <Tile label={T.blockRestzeit} text={hasWorkout && !free ? (p?.blockRemainingSec === null ? T.offen : fmtTime(p?.blockRemainingSec)) : '–'} id="restzeit" zeit />
         <Tile label={T.gesamtzeit} text={fmtTime(p?.totalElapsedSec ?? 0)} id="gesamtzeit" zeit />
       </div>
+      <Verlauf records={c.records()} plannedSec={w ? (totalDurationSec(w) ?? undefined) : undefined} />
       {w && p && (
         <div class="vorschau">
           <Profile w={w} elapsedSec={p.totalElapsedSec} blockIndex={p.blockIndex} />
@@ -456,6 +459,7 @@ function End({ c, s }: { c: Controller; s: AppState }) {
         <p>
           {T.dauer}: {fmtTime(dur)} · {T.durchschnittWatt}: {r.avgPower ?? '–'} · {T.durchschnittPuls}: {r.avgHeartRate ?? '–'}
         </p>
+        <Verlauf records={r.recording.records} />
         {r.fourDp && (
           <p>
             {T.bestwerte}: 5 s {r.fourDp.best5s ?? '–'} W · 1 min {r.fourDp.best1min ?? '–'} W · 5 min {r.fourDp.best5min ?? '–'} W · 20 min {r.fourDp.best20min ?? '–'} W
@@ -480,6 +484,53 @@ function End({ c, s }: { c: Controller; s: AppState }) {
         {r.uploaded && <p>{T.hochgeladen(r.uploaded)}</p>}
       </section>
       <button onClick={() => c.backToStart()}>{T.zurueck}</button>
+    </div>
+  );
+}
+
+// ---------------- Verlauf ----------------
+
+/** Diagramm wie in intervals.icu: Leistung und Zielleistung (links, Watt), Puls und Trittfrequenz (rechts). */
+function Verlauf({ records, plannedSec }: { records: RecordSample[]; plannedSec?: number }) {
+  const W = 1000;
+  const H = 170;
+  const m = buildChart(records, { width: W, height: H, plannedSec });
+  const grid = [0, 0.25, 0.5, 0.75, 1];
+  return (
+    <div class="verlauf" id="verlauf">
+      <svg viewBox={`0 0 ${W + 100} ${H + 36}`} role="img" aria-label={T.verlauf}>
+        <g transform="translate(50 8)">
+          {grid.map((f) => (
+            <g key={f}>
+              <line x1="0" x2={W} y1={H - f * H} y2={H - f * H} class="gitter" />
+              <text x="-6" y={H - f * H + 4} class="achse links" text-anchor="end">
+                {Math.round(m.leftMax * f)}
+              </text>
+              <text x={W + 6} y={H - f * H + 4} class="achse rechts">
+                {Math.round(m.rightMin + (m.rightMax - m.rightMin) * f)}
+              </text>
+            </g>
+          ))}
+          {m.ticksMin.map((t) => (
+            <g key={t}>
+              <line x1={((t * 60) / m.domainSec) * W} x2={((t * 60) / m.domainSec) * W} y1="0" y2={H} class="gitter" />
+              <text x={((t * 60) / m.domainSec) * W} y={H + 18} class="achse" text-anchor="middle">
+                {t} {T.minuteKurz}
+              </text>
+            </g>
+          ))}
+          <path d={m.paths.target} class="linie ziel" />
+          <path d={m.paths.cadence} class="linie trittfrequenz" />
+          <path d={m.paths.heartRate} class="linie puls" />
+          <path d={m.paths.power} class="linie leistung" />
+        </g>
+      </svg>
+      <div class="legende">
+        <span class="l leistung">{T.legendeLeistung}</span>
+        <span class="l ziel">{T.legendeZiel}</span>
+        <span class="l puls">{T.legendePuls}</span>
+        <span class="l trittfrequenz">{T.legendeTrittfrequenz}</span>
+      </div>
     </div>
   );
 }

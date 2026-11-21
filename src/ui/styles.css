@@ -252,3 +252,77 @@ main.fahrt-seite {
     grid-column: span 2;
   }
 }
+
+/* Verlaufsdiagramm */
+.verlauf {
+  background: var(--karte);
+  border: 1px solid var(--rand);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 12px 0;
+}
+.verlauf svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.verlauf .gitter {
+  stroke: #2b2b33;
+  stroke-width: 1;
+}
+.verlauf .achse {
+  fill: var(--gedaempft);
+  font-size: 13px;
+}
+.verlauf .achse.rechts {
+  fill: #5fb0ea;
+}
+.verlauf .linie {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.verlauf .linie.leistung {
+  stroke: #f0c93a;
+  stroke-width: 2.5;
+}
+.verlauf .linie.ziel {
+  stroke: #ffffff;
+  stroke-dasharray: 5 3;
+}
+.verlauf .linie.puls {
+  stroke: #3b9ee0;
+}
+.verlauf .linie.trittfrequenz {
+  stroke: #6b8f7b;
+  stroke-width: 1.5;
+}
+.verlauf .legende {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: var(--gedaempft);
+  font-size: 14px;
+  margin-top: 4px;
+}
+.verlauf .l::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: currentColor;
+}
+.verlauf .l.leistung {
+  color: #f0c93a;
+}
+.verlauf .l.ziel {
+  color: #ffffff;
+}
+.verlauf .l.puls {
+  color: #3b9ee0;
+}
+.verlauf .l.trittfrequenz {
+  color: #6b8f7b;
+}

@@ -381,6 +381,26 @@ test.describe('Darstellung', () => {
     }
   });
 
+  test('[SR-4076a0/AK-rds6] ein Diagramm zeigt Leistung, Zielleistung, Puls und Trittfrequenz über die Zeit, auch auf dem Abschlussbild', async ({ page }) => {
+    await start(page);
+    await pairBike(page);
+    await page.getByRole('button', { name: 'Pulsgurt koppeln' }).click();
+    await expect(gurtStatus(page)).toHaveText('verbunden');
+    await startManual(page, '10:00 150');
+    const lines = ['leistung', 'ziel', 'puls', 'trittfrequenz'];
+    const d = (cls: string) => page.locator(`#verlauf path.${cls}`).getAttribute('d');
+    for (let i = 0; i < 5; i++) {
+      await emitBike(page, { power: 140 + i * 3, cadence: 80 + i, speedKmh: 30 });
+      await call(page, `f.hrEmit('gurt1', ${120 + i})`);
+      await page.waitForTimeout(1000);
+    }
+    for (const cls of lines) await expect.poll(async () => (await d(cls)) ?? '', { message: cls }).toMatch(/^M[\d. ]+L/);
+    for (const l of ['Leistung', 'Zielleistung', 'Puls', 'Trittfrequenz']) await expect(page.locator('#verlauf .legende')).toContainText(l);
+    await page.getByRole('button', { name: 'Beenden' }).click();
+    await expect(page.getByRole('heading', { name: 'Fahrt beendet' })).toBeVisible();
+    for (const cls of lines) expect((await d(cls)) ?? '', cls).toMatch(/^M[\d. ]+L/);
+  });
+
   test('Live-Werte sind in Vollbildgröße sehr groß (Anhaltspunkt für die Abnahme aus der Distanz)', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await start(page);
