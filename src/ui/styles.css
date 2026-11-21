@@ -159,26 +159,37 @@ strong[data-status='getrennt'] {
 }
 .werte {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 12px;
   margin: 12px 0;
 }
 .kachel {
+  grid-column: span 2;
+  container-type: inline-size; /* Schrift richtet sich nach der Breite der Kachel */
   background: var(--karte);
   border: 1px solid var(--rand);
   border-radius: 12px;
   padding: 10px 16px;
   text-align: center;
+  min-width: 0;
+}
+.kachel.zeit {
+  grid-column: span 3;
 }
 .kachel .beschriftung {
   color: var(--gedaempft);
   font-size: 22px;
 }
 .kachel .zahl {
-  font-size: clamp(72px, 16vw, 200px);
+  font-size: 30cqw; /* 3 Ziffern passen immer in die Kachel */
   font-weight: 700;
   line-height: 1.05;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.kachel.zeit .zahl {
+  font-size: 17cqw; /* bis 9:59:59 */
 }
 .kachel .unter {
   font-size: 28px;
@@ -225,8 +236,19 @@ strong[data-status='getrennt'] {
   font-size: 20px;
 }
 
-@media (max-width: 600px) {
+main.fahrt-seite {
+  max-width: none;
+}
+
+@media (max-width: 700px) {
   main {
     padding: 10px;
+  }
+  .werte {
+    grid-template-columns: 1fr 1fr;
+  }
+  .kachel,
+  .kachel.zeit {
+    grid-column: span 2;
   }
 }

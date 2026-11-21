@@ -18,7 +18,7 @@ const statusText = (s: string) => (s === 'verbunden' ? T.verbunden : s === 'verb
 export function App({ c }: { c: Controller }) {
   const s = useAppState(c);
   return (
-    <main>
+    <main class={s.screen === 'fahrt' ? 'fahrt-seite' : undefined}>
       {s.error && (
         <div class="meldung fehler" role="alert">
           {s.error} <button onClick={() => c.clearMessages()}>{T.schliessen}</button>
@@ -376,8 +376,8 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
         <Tile label={T.watt} value={s.live.power} sub={p?.targetWatts != null ? `${T.ziel} ${p.targetWatts}` : undefined} id="watt" />
         <Tile label={T.puls} value={s.live.heartRate} id="puls" />
         <Tile label={T.trittfrequenz} value={s.live.cadence !== undefined ? Math.round(s.live.cadence) : undefined} id="trittfrequenz" />
-        <Tile label={T.blockRestzeit} text={hasWorkout && !free ? (p?.blockRemainingSec === null ? T.offen : fmtTime(p?.blockRemainingSec)) : '–'} id="restzeit" />
-        <Tile label={T.gesamtzeit} text={fmtTime(p?.totalElapsedSec ?? 0)} id="gesamtzeit" />
+        <Tile label={T.blockRestzeit} text={hasWorkout && !free ? (p?.blockRemainingSec === null ? T.offen : fmtTime(p?.blockRemainingSec)) : '–'} id="restzeit" zeit />
+        <Tile label={T.gesamtzeit} text={fmtTime(p?.totalElapsedSec ?? 0)} id="gesamtzeit" zeit />
       </div>
       {w && p && (
         <div class="vorschau">
@@ -412,9 +412,9 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
   );
 }
 
-function Tile({ label, value, text, sub, id }: { label: string; value?: number | undefined; text?: string; sub?: string; id: string }) {
+function Tile({ label, value, text, sub, id, zeit }: { label: string; value?: number | undefined; text?: string; sub?: string; id: string; zeit?: boolean }) {
   return (
-    <div class="kachel" id={id}>
+    <div class={zeit ? 'kachel zeit' : 'kachel'} id={id}>
       <div class="beschriftung">{label}</div>
       <div class="zahl">{text ?? (value === undefined ? '–' : String(value))}</div>
       {sub && <div class="unter">{sub}</div>}

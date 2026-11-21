@@ -362,6 +362,25 @@ test.describe('Darstellung', () => {
     expect(r.bad).toEqual([]);
   });
 
+  test('die Live-Zahlen passen bei jeder Fensterbreite in ihre Kacheln, auch 4-stellige Watt und Zeiten über 9 Stunden', async ({ page }) => {
+    await start(page);
+    await pairBike(page);
+    await page.getByRole('button', { name: 'Pulsgurt koppeln' }).click();
+    await expect(gurtStatus(page)).toHaveText('verbunden');
+    await startManual(page, '600:00 150'); // 10 Stunden, Restzeit 9:59:59
+    await emitBike(page, { power: 1234, cadence: 123, speedKmh: 40 });
+    await call(page, "f.hrEmit('gurt1', 188)");
+    await expect(page.locator('#watt .zahl')).toHaveText('1234');
+    for (const w of [400, 700, 1100, 1920]) {
+      await page.setViewportSize({ width: w, height: 1000 });
+      for (const id of ['watt', 'puls', 'trittfrequenz', 'restzeit', 'gesamtzeit']) {
+        const r = await page.locator(`#${id} .zahl`).evaluate((e) => ({ scroll: e.scrollWidth, client: e.clientWidth }));
+        expect(r.scroll, `${id} bei ${w}px`).toBeLessThanOrEqual(r.client);
+      }
+      if (w === 1100) await page.screenshot({ path: '.tmp/ride-1100.png' });
+    }
+  });
+
   test('Live-Werte sind in Vollbildgröße sehr groß (Anhaltspunkt für die Abnahme aus der Distanz)', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await start(page);
