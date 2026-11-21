@@ -40,5 +40,5 @@ void controller.init();
 
 // Offline-Start als installierte App (nicht im Entwicklungsmodus und nicht unter Testautomatisierung).
 if (import.meta.env.PROD && 'serviceWorker' in navigator && !navigator.webdriver) {
-  navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('Offline-Start nicht verfügbar', e));
+  navigator.serviceWorker.register('./sw.js').catch((e) => console.warn('Offline-Start nicht verfügbar', e));
 }

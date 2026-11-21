@@ -2,6 +2,13 @@
 
 Ein eigener Smart Trainer (Trainingssoftware für das Wahoo Kickr Bike v2).
 
+## Weitergeben (GitHub Pages)
+Der Quellcode liegt auf https://github.com/elron27/Pedalo. Bei jedem Push auf `main` baut GitHub die App und veröffentlicht sie unter
+`https://elron27.github.io/Pedalo/` (Workflow `.github/workflows/pages.yml`; einmalig in den Repository-Einstellungen unter „Pages“ die Quelle „GitHub Actions“ wählen).
+Wer Pedalo nutzen will, öffnet diese Adresse in Chrome und installiert die App wie unten beschrieben. Es ist nichts weiter nötig, auch kein Node.js.
+Jeder Nutzer legt seine eigenen Daten an (Profil, FTP, optional intervals.icu-Zugang); sie bleiben im eigenen Browser und gehen nirgendwohin außer zu intervals.icu.
+Voraussetzung: Chrome oder Edge mit Bluetooth (Windows, Mac, Android), ein Bike mit FTMS (Kickr Bike v2 geprüft).
+
 ## Benutzen (ohne Entwicklungsumgebung)
 Voraussetzung: Node.js LTS und Google Chrome (Web Bluetooth).
 - **Windows:** Doppelklick auf `Pedalo-starten.cmd`. Beim ersten Start wird installiert und gebaut, danach öffnet sich Chrome mit Pedalo. Das schwarze Fenster offen lassen, solange du fährst; Schließen beendet die App.

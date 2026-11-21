@@ -18,6 +18,7 @@ const m0LiveLog = {
 };
 
 export default defineConfig({
+  base: './', // läuft auch unter einem Unterpfad (GitHub Pages)
   plugins: [m0LiveLog],
   esbuild: { jsx: 'automatic', jsxImportSource: 'preact' },
   test: {

@@ -6,10 +6,11 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE);
-      const res = await fetch('/', { cache: 'no-store' });
+      const scope = self.registration.scope;
+      const res = await fetch(scope, { cache: 'no-store' });
       const html = await res.clone().text();
-      await cache.put('/', res);
-      const assets = [...html.matchAll(/(?:src|href)="(\/[^"]+)"/g)].map((m) => m[1]);
+      await cache.put(scope, res);
+      const assets = [...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map((m) => new URL(m[1], scope).href).filter((u) => u.startsWith(scope));
       await Promise.all(assets.map((a) => cache.add(a).catch(() => undefined)));
       await self.skipWaiting();
     })(),
@@ -27,10 +28,10 @@ self.addEventListener('fetch', (event) => {
       const cache = await caches.open(CACHE);
       try {
         const res = await fetch(req, { cache: 'no-store' });
-        if (res.ok) void cache.put(req.mode === 'navigate' ? '/' : req, res.clone());
+        if (res.ok) void cache.put(req.mode === 'navigate' ? self.registration.scope : req, res.clone());
         return res;
       } catch (e) {
-        const hit = await cache.match(req.mode === 'navigate' ? '/' : req);
+        const hit = await cache.match(req.mode === 'navigate' ? self.registration.scope : req);
         if (hit) return hit;
         throw e;
       }
