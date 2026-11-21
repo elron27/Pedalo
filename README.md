@@ -9,6 +9,8 @@ Wer Pedalo nutzen will, öffnet diese Adresse in Chrome und installiert die App 
 Jeder Nutzer legt seine eigenen Daten an (Profil, FTP, optional intervals.icu-Zugang); sie bleiben im eigenen Browser und gehen nirgendwohin außer zu intervals.icu.
 Voraussetzung: Chrome oder Edge mit Bluetooth (Windows, Mac, Android), ein Bike mit FTMS (Kickr Bike v2 geprüft).
 
+Eine Anleitung für Nutzer liegt der App bei: `public/anleitung.html` (in der App unter „Anleitung und Hilfe“ auf dem Startbildschirm).
+
 ## Benutzen (ohne Entwicklungsumgebung)
 Voraussetzung: Node.js LTS und Google Chrome (Web Bluetooth).
 - **Windows:** Doppelklick auf `Pedalo-starten.cmd`. Beim ersten Start wird installiert und gebaut, danach öffnet sich Chrome mit Pedalo. Das schwarze Fenster offen lassen, solange du fährst; Schließen beendet die App.

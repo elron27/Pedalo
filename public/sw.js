@@ -11,6 +11,7 @@ self.addEventListener('install', (event) => {
       const html = await res.clone().text();
       await cache.put(scope, res);
       const assets = [...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map((m) => new URL(m[1], scope).href).filter((u) => u.startsWith(scope));
+      assets.push(new URL('anleitung.html', scope).href);
       await Promise.all(assets.map((a) => cache.add(a).catch(() => undefined)));
       await self.skipWaiting();
     })(),

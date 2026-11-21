@@ -1,6 +1,7 @@
 // Alle Texte der Oberfläche, deutsch. Die Bildschirme verwenden nur diese Einträge.
 export const T = {
   appName: 'Pedalo',
+  anleitung: 'Anleitung und Hilfe',
   fahrer: 'Fahrer',
   gast: 'Gast (ohne Profil und ohne Konten)',
   neuesProfil: 'Neues Profil',

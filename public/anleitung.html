@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pedalo – Anleitung</title>
+<style>
+  :root { color-scheme: dark; --bg:#0b0b0d; --karte:#17171b; --text:#ececf1; --leise:#a0a0ab; --akzent:#2fb86b; }
+  body { background:var(--bg); color:var(--text); font:18px/1.55 system-ui, sans-serif; margin:0; }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:34px; margin:0 0 4px; }
+  h2 { font-size:24px; margin:36px 0 8px; color:var(--akzent); }
+  h3 { font-size:19px; margin:20px 0 4px; }
+  p, li { color:var(--text); }
+  .leise { color:var(--leise); }
+  ol, ul { padding-left:1.3em; }
+  li { margin:6px 0; }
+  .karte { background:var(--karte); border-radius:12px; padding:12px 18px; margin:14px 0; }
+  code { background:#26262c; padding:1px 6px; border-radius:5px; }
+  a { color:var(--akzent); }
+  nav a { margin-right:14px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Pedalo – Anleitung</h1>
+<p class="leise">Trainingssoftware für das Wahoo Kickr Bike. Sie steuert das Bike nach einem Trainingsplan, zeigt Watt, Puls und Trittfrequenz und speichert die Fahrt als .fit-Datei.</p>
+<nav><a href="#was">Was du brauchst</a><a href="#install">Installieren</a><a href="#fahren">Fahren</a><a href="#icu">intervals.icu</a><a href="#hilfe">Probleme</a></nav>
+
+<h2 id="was">Was du brauchst</h2>
+<ul>
+  <li>Ein Wahoo Kickr Bike (v2 ist getestet) oder ein anderes Bike, das Bluetooth-FTMS kann.</li>
+  <li>Optional einen Bluetooth-Pulsgurt.</li>
+  <li>Einen Computer oder ein Android-Gerät mit Bluetooth und <strong>Google Chrome</strong> (oder Edge). Safari und Firefox können kein Web Bluetooth.</li>
+  <li>Kein Konto nötig. Ein Konto bei <a href="https://intervals.icu" target="_blank" rel="noopener">intervals.icu</a> ist freiwillig: damit holt Pedalo deine geplanten Trainings und lädt die Fahrt dorthin hoch.</li>
+</ul>
+
+<h2 id="install">Installieren</h2>
+<div class="karte">
+<ol>
+  <li>Öffne die Adresse, die dir der Absender gegeben hat, in <strong>Chrome</strong>.</li>
+  <li>Klicke im Adressfeld rechts auf das <strong>Installieren-Symbol</strong> (kleiner Bildschirm mit Pfeil). Alternativ: Menü ⋮ → „Speichern und teilen“ → „Installieren…“.</li>
+  <li>Bestätige. Pedalo erscheint jetzt wie ein normales Programm im Startmenü (Windows), im Launchpad (Mac) oder auf dem Startbildschirm (Android). Du kannst es an die Taskleiste heften.</li>
+</ol>
+<p class="leise">Nach der Installation startet Pedalo auch ohne Internet. Deine Einstellungen, Profile und Trainings bleiben in diesem Browser auf diesem Gerät gespeichert. Auf einem zweiten Gerät musst du alles neu anlegen.</p>
+</div>
+
+<h2 id="fahren">Die erste Fahrt</h2>
+<ol>
+  <li><strong>Profil anlegen:</strong> „Neues Profil“, Name und deine FTP (Dauerleistung in Watt) eintragen. Weißt du sie nicht, nimm den Gastmodus und schätze sie, oder mach später einen FTP-Test (siehe unten).</li>
+  <li><strong>Bike koppeln:</strong> Kurbel kurz, damit das Bike wach ist, dann „Bike koppeln“ und dein Bike aus der Liste wählen. Der Status wechselt auf „verbunden“.</li>
+  <li><strong>Pulsgurt koppeln</strong> (optional): Gurt anlegen, „Pulsgurt koppeln“, auswählen. Beim nächsten Mal verbindet sich der gespeicherte Gurt von selbst.</li>
+  <li><strong>Training wählen</strong> und starten:
+    <ul>
+      <li><em>Freies Training:</em> Du schaltest am Bike, die Leistung ergibt sich aus Gang und Tritt.</li>
+      <li><em>intervals.icu:</em> Deine geplanten Radtrainings der nächsten 14 Tage (siehe unten).</li>
+      <li><em>Bibliothek:</em> Trainings, die du dir gemerkt hast, auch Favoriten.</li>
+      <li><em>Von Hand:</em> Eine Zeile je Block, z. B. <code>10:00 150</code> für 10 Minuten mit 150 Watt, <code>offen 120</code> für einen Block ohne feste Dauer.</li>
+      <li><em>FTP-Test:</em> Rampentest, 20-Minuten-Test oder Wahoo-4DP-Test. Am Ende schlägt Pedalo eine neue FTP vor, die du übernehmen kannst.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>Während der Fahrt</h3>
+<ul>
+  <li>Große Kacheln zeigen Watt (mit Zielwert), Puls mit Zone, Trittfrequenz, Restzeit des Blocks, Restzeit des ganzen Trainings und Gesamtzeit. Darunter siehst du den Verlauf und den nächsten Block.</li>
+  <li><strong>Pause / Weiter:</strong> hält das Training an, der Widerstand geht auf 0 Watt.</li>
+  <li><strong>Block überspringen</strong>, <strong>Intensität ± 5 %</strong> ändert alle Zielwerte.</li>
+  <li><strong>Freies Training zuschalten:</strong> du schaltest kurz selbst; „Zurück zum Training“ setzt den Plan fort.</li>
+  <li><strong>Vollbild</strong> für den Blick aus der Distanz. Der Bildschirm bleibt während der Fahrt an.</li>
+  <li><strong>Beenden</strong> schließt die Fahrt ab. Reißt die Verbindung kurz ab, läuft die Zeit weiter und Pedalo verbindet sich neu.</li>
+</ul>
+
+<h3>Nach der Fahrt</h3>
+<ul>
+  <li><strong>.fit-Datei speichern</strong> legt die Datei in deinen Downloads ab. Du kannst sie in Strava, Garmin Connect, TrainingPeaks usw. hochladen.</li>
+  <li><strong>Zu intervals.icu hochladen</strong>, wenn du dort ein Konto hinterlegt hast.</li>
+  <li>Wurde die App mitten in der Fahrt geschlossen oder stürzte der Rechner ab, findest du die Fahrt beim nächsten Start unter „Nicht beendete Fahrt gefunden“ und kannst sie wiederherstellen.</li>
+</ul>
+
+<h2 id="icu">intervals.icu verbinden (freiwillig)</h2>
+<ol>
+  <li>Melde dich auf intervals.icu an und öffne <strong>Settings → Developer Settings</strong> (Einstellungen für Entwickler).</li>
+  <li>Dort stehen deine <strong>Athlete-ID</strong> (so etwas wie <code>i12345</code>) und der <strong>API-Schlüssel</strong> (über „API key“ erzeugen).</li>
+  <li>In Pedalo beim Profil „Profil bearbeiten“ und beide Werte eintragen.</li>
+  <li>Dann zeigt der Reiter „intervals.icu“ deine geplanten Radtrainings, und nach der Fahrt gibt es den Hochladen-Knopf. Aus deinen Einstellungen holt Pedalo außerdem deine Pulszonen für die Farbe der Pulskachel.</li>
+</ol>
+<div class="karte"><p><strong>Datenschutz:</strong> Der Schlüssel liegt nur in deinem Browser. Pedalo schickt ihn ausschließlich an intervals.icu, sonst nirgendwohin. Es gibt keinen Pedalo-Server und keine Auswertung.</p></div>
+<p class="leise">Trainings mit Rampen oder reiner Pulssteuerung kann Pedalo noch nicht fahren und markiert sie als „nicht darstellbar“. Die Watt werden so gefahren, wie sie im Training stehen (kein Umrechnen auf deine FTP).</p>
+
+<h2 id="hilfe">Wenn etwas nicht klappt</h2>
+<ul>
+  <li><strong>Bike bleibt „getrennt“ oder „verbindet“:</strong> kurz kurbeln und erneut „Bike koppeln“. Hilft das nicht, das Bike aus- und wieder einschalten. Es darf nicht gleichzeitig mit einer anderen App (Wahoo-App, Zwift …) verbunden sein.</li>
+  <li><strong>Kein Auswahlfenster für Bluetooth:</strong> du brauchst Chrome oder Edge, Bluetooth muss am Gerät an sein.</li>
+  <li><strong>Pulsgurt nicht in der Liste:</strong> Gurt leicht anfeuchten, anlegen, keine andere App verbunden lassen.</li>
+  <li><strong>intervals.icu lehnt ab:</strong> Athlete-ID und Schlüssel noch einmal aus den Developer Settings kopieren (ohne Leerzeichen).</li>
+  <li><strong>Pause bringt keine 0 Watt?</strong> Das ist noch nicht an jedem Bike geprüft. Sag Bescheid, wenn der Widerstand in der Pause bleibt.</li>
+</ul>
+
+<p class="leise" style="margin-top:40px">Pedalo ist ein privates Projekt und steht ohne Gewähr zur Verfügung. Quellcode: <a href="https://github.com/elron27/Pedalo" target="_blank" rel="noopener">github.com/elron27/Pedalo</a>.</p>
+</main>
+</body>
+</html>

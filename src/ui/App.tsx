@@ -44,6 +44,11 @@ function Start({ c, s }: { c: Controller; s: AppState }) {
   return (
     <>
       <h1>{T.appName}</h1>
+      <p>
+        <a href="./anleitung.html" target="_blank" rel="noopener">
+          {T.anleitung}
+        </a>
+      </p>
       {s.unfinished.length > 0 && (
         <section class="karte warnung">
           <h2>{T.nichtBeendet}</h2>
