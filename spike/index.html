@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pedalo M0 Spike</title>
+<style>
+  body{font:14px system-ui,sans-serif;background:#111;color:#ddd;margin:0;padding:16px;max-width:1000px}
+  h1{font-size:18px} h2{font-size:15px;margin:20px 0 6px;border-bottom:1px solid #333;padding-bottom:4px}
+  button{background:#2a4;border:0;color:#fff;padding:8px 12px;margin:2px;border-radius:4px;cursor:pointer}
+  button.sec{background:#445} button:disabled{opacity:.4}
+  input{background:#222;color:#ddd;border:1px solid #444;padding:6px;margin:2px}
+  .big{font-size:42px;font-weight:600} .grid{display:flex;gap:24px;flex-wrap:wrap}
+  pre{background:#000;padding:8px;max-height:260px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+  small{color:#999}
+</style>
+</head>
+<body>
+<h1>Pedalo M0 – technischer Spike (wird nicht produktiv verwendet)</h1>
+<small>Chrome, über http://localhost geöffnet. Alles unten ist Messen, nicht Bauen.</small>
+
+<h2>1 · Bike (FTMS)</h2>
+<button id="bikeConnect">Bike verbinden</button>
+<button id="bikeReconnect" class="sec">Neu verbinden (ohne Auswahl)</button>
+<button id="bikeDisconnect" class="sec">Trennen</button>
+<div class="grid">
+  <div>Watt<div class="big" id="w">–</div></div>
+  <div>Trittfrequenz<div class="big" id="c">–</div></div>
+  <div>km/h<div class="big" id="s">–</div></div>
+  <div>Puls (aus Bike)<div class="big" id="bhr">–</div></div>
+</div>
+<div>
+  <button id="reqCtrl" class="sec">Steuerung anfordern</button>
+  <button id="start" class="sec">Start/Fortsetzen</button>
+  <input id="target" type="number" value="100" style="width:70px"> W
+  <button id="setTarget">Zielwatt setzen</button>
+  <button id="pause" class="sec">Pause</button>
+  <button id="stop" class="sec">Stop</button>
+  <button id="reset" class="sec">Reset</button>
+</div>
+<small>Ablauf siehe docs/m0-checkliste.md. Jede Notiz geht ins Protokoll:</small><br>
+<input id="note" style="width:60%" placeholder="Notiz, z. B. geschaltet 3 Gänge hoch"><button id="addNote" class="sec">Notiz</button>
+
+<h2>2 · Pulsgurt</h2>
+<button id="hrConnect">Pulsgurt verbinden</button>
+<div>Puls<div class="big" id="hr">–</div></div>
+
+<h2>3 · intervals.icu</h2>
+<input id="ath" placeholder="Athlet-ID (z. B. i12345 oder 0)" value="0">
+<input id="key" type="password" placeholder="API-Schlüssel (wird nicht gespeichert)" style="width:260px">
+<input id="days" type="number" value="14" style="width:60px"> Tage voraus
+<button id="icuEvents">Trainings aus Kalender lesen</button><br>
+<input id="fit" type="file" accept=".fit"><button id="icuUpload">.fit hochladen (Test)</button>
+
+<h2>Protokoll</h2>
+<button id="dl" class="sec">Protokoll als Datei speichern</button>
+<pre id="log"></pre>
+<script type="module" src="./spike.ts"></script>
+</body>
+</html>

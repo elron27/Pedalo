@@ -10,5 +10,5 @@
     "noEmit": true,
     "types": ["vite/client", "web-bluetooth"]
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "spike"]
 }
