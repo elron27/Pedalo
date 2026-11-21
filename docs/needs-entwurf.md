@@ -97,8 +97,12 @@ Aus dem Screenshot: Die Seite sagt, dass man **keine OAuth-App braucht, wenn man
 - **Speicherung pro Fahrer:** Schlüssel oder Tokens liegen im Browser des Nutzers. Das ist für ein Ein-PC-Setup vertretbar, muss aber als Anforderung stehen.
 - **Freies Training am Bike:** Ob die Gangschaltung des Kickr Bike v2 ohne gesetzte Zielwatt die Leistung ändert, ist am echten Bike zu testen.
 
-## Offene Fragen für die nächste Runde
+## Antworten aus der dritten Runde
 
-1. Erscheint ein von Blocks geplantes Training in deinem intervals.icu-Kalender mit Blöcken (Dauer und Leistung), oder nur als Titel? Ein kurzer Blick in den Kalender reicht.
-2. Soll die erste Version nur mit API-Schlüssel laufen, und OAuth folgt später für Frau und Freunde?
-3. Soll die App auf einem öffentlichen Webserver liegen (eine URL, die auch der Freund öffnet), oder nur lokal auf deinem PC laufen?
+1. **Blocks-Trainings in intervals.icu:** Bestätigt, dass sie dort ankommen. Die Annahme ist, dass sie mit Blockstruktur ankommen. Das ist beim ersten Test mit der API zu bestätigen.
+2. **Version 1:** läuft mit API-Schlüssel pro Fahrerprofil. OAuth folgt später.
+3. **Betrieb:** lokal auf dem PC, kein öffentlicher Webserver. Damit entfällt die Redirect-URL für OAuth in Version 1. Für den Freund mit Mac läuft die App ebenfalls lokal bei ihm.
+
+## Offene Fragen
+
+Keine mehr auf Anforderungsebene. Offen sind nur die technischen Prüfungen aus dem Abschnitt „Technische Risiken“.
