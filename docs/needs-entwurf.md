@@ -6,16 +6,16 @@ Die Zuordnung muss in ReqSeq übernommen werden. Die Datei-IDs stehen in Klammer
 ---
 
 ## N1 – Ein Training durchfahren
-Der Athlet fährt ein Training mit Zielwatt je Block durch. Das Training kommt aus Blocks (direkt über den Connector, Fallback intervals.icu) oder aus einer lokalen Bibliothek.
+Der Athlet fährt ein Training mit Zielwatt je Block durch. Das Training kommt aus intervals.icu (dorthin synchronisiert Blocks automatisch), von Hand oder aus einer lokalen Bibliothek.
 
-- Training aus Blocks direkt abrufen und als Block-Liste anzeigen (SR-120d, SR-87da, geändert, siehe Abschnitt „Antworten“)
+- Trainings aus intervals.icu abrufen und als Block-Liste anzeigen (SR-120d, SR-87da, geändert: Quelle ist intervals.icu, nicht Blocks direkt)
 - Blocks-Struktur verarbeiten: Blöcke mit Dauer, % FTP, Wiederholungen und offenen Blöcken (ergänzt)
 - Blöcke nacheinander abspielen, Zielwatt im ERG-Modus (SR-fc22)
 - Vorschau auf nächsten Block und Workout-Profil (SR-21f9)
 - Aktuellen Block überspringen (SR-0015)
 - Workout pausieren und fortsetzen (SR-2b29)
 - Intensität live in Prozent für alle folgenden Blöcke (SR-7d9f)
-- Freies Training ohne ERG jederzeit zuschalten (SR-4962)
+- Freies Training ohne ERG jederzeit zuschalten, auch ohne Workout. Die Leistung ändert sich allein durch Schalten am Bike, die App setzt keine Zielwatt (SR-4962, ergänzt)
 - **Neu, Kandidat:** Eigene Trainingsbibliothek mit Favoriten, lokal gespeichert, auch ohne Blocks-Verbindung
 - **Neu, Kandidat:** Bibliothek zeigt bekannte Trainings an der Seite, Auswahl startet das Training
 
@@ -60,7 +60,8 @@ Jeder Fahrer hat sein eigenes Profil mit eigenem FTP, eigenem Pulsgurt und eigen
 - Zusätzlicher FTP-Test, z. B. 20 Minuten (SR-9d30, Option)
 - **Neu, bestätigt:** Wahoo-4DP-Test als weiterer FTP-Test (Option)
 - **Neu, bestätigt:** Mehrere Fahrerprofile, umschaltbar, jedes mit eigenem FTP, eigenem Blocks-Konto und eigenem intervals.icu-Konto (falls vorhanden)
-- **Neu, bestätigt:** Gastmodus ohne Profil und ohne Konten: sofort fahren, FTP-Angabe per Hand, Upload entfällt
+- **Neu, bestätigt:** Gastmodus ohne Profil und ohne Konten: sofort fahren, alle Werte (z. B. FTP) per Hand eintippen, Upload entfällt
+- **Neu, bestätigt:** Auch ein Fahrer ohne verbundenes Konto kann alle Werte von Hand eintippen und fahren
 
 ## N7 – Plattform und Sprache
 Rahmenbedingungen, die die gesamte App betreffen.
@@ -75,17 +76,29 @@ Rahmenbedingungen, die die gesamte App betreffen.
 
 1. **FTP-Tests:** Alle drei sollen möglich sein (20 Minuten, Wahoo 4DP, Rampe). Damit sind sie alle in Version 1.
 2. **iPhone:** wird ausgelassen.
-3. **Blocks-Anbindung:** Die App soll direkt über den Connector abrufen. Falls das nicht geht, wird intervals.icu als Quelle genutzt.
-4. **Fahrerprofile:** umschaltbar, eigener FTP, eigenes Blocks-Konto und eigenes intervals.icu-Konto (falls vorhanden). Im Gastmodus fährt man ohne Konto.
+3. **Blocks-Anbindung:** Erst „direkt über den Connector“, dann die Überlegung, ob intervals.icu allein reicht, weil Blocks dorthin automatisch synchronisiert. **Empfehlung: intervals.icu als einzige Schnittstelle** (Trainings lesen, .fit hochladen). Damit entfällt die Abhängigkeit von einer Blocks-API, die ich nicht kenne. Zu prüfen: Kommen die Blocks-Trainings in intervals.icu mit Blockstruktur (Dauer, % FTP) im Kalender an?
+4. **Fahrerprofile:** umschaltbar, eigener FTP, eigenes intervals.icu-Konto (falls vorhanden). Ein Blocks-Konto muss die App nicht kennen, wenn intervals.icu die Quelle ist. Im Gastmodus fährt man ohne Konto.
+5. **Manuelle Eingabe:** Gast und Fahrer ohne Konto tippen alles von Hand ein.
+6. **Freies Training:** Schalten am Bike ändert die Leistung, die App setzt keine Zielwatt (SR-4962 ergänzt).
+
+## intervals.icu: API-Schlüssel oder OAuth?
+
+Aus dem Screenshot: Die Seite sagt, dass man **keine OAuth-App braucht, wenn man nur auf Daten zugreift, die man selbst in intervals.icu sieht**. Jeder Athlet hat einen API-Schlüssel. OAuth wird nötig, wenn eine App von **mehreren Athleten** genutzt wird oder Webhooks braucht.
+
+- Für den Start reicht der **API-Schlüssel**: Jedes Fahrerprofil speichert seinen eigenen Schlüssel.
+- Sobald Frau, Gast oder Freund die App ohne Schlüssel-Kopieren nutzen sollen, ist **OAuth** die saubere Lösung. Der Antrag wird manuell geprüft. Die App läuft im Browser und kann das Client-Geheimnis nicht verstecken, deshalb als „Öffentlicher Client“ mit „PKCE erforderlich“. `http://localhost/*` ist als Redirect immer erlaubt, für eine gehostete App braucht es eine eigene Redirect-URL.
+- Webhooks sind nicht nötig und bleiben aus.
+- Den Antrag solltest du **noch nicht stellen**, bevor wir die Schnittstelle getestet haben. Er blockiert die Entwicklung nicht.
 
 ## Technische Risiken, die vor dem Coding zu prüfen sind
 
-- **Direkter Blocks-Zugriff aus der Web-App:** Der Connector, den ich hier nutze, ist ein Werkzeug für mich, nicht für eine Browser-App. Die App bräuchte eine öffentliche Blocks-API mit Zugang pro Fahrer. Ob es die gibt, ist nicht geklärt. Ohne API fällt die Anbindung auf intervals.icu zurück, wie du es vorgesehen hast.
-- **intervals.icu-API:** Nach meinem Kenntnisstand gibt es sie mit einem API-Schlüssel pro Konto, sie kann Trainings lesen und .fit hochladen. Das muss noch geprüft werden, auch ob der Browser sie ohne Proxy aufrufen darf (CORS).
-- **Speicherung pro Fahrer:** Konten und Schlüssel liegen dann im Browser des Nutzers. Das ist für ein Ein-PC-Setup vertretbar, muss aber als Anforderung stehen.
+- **Blockstruktur in intervals.icu:** Ob die von Blocks synchronisierten Trainings dort als strukturierte Trainings (Dauer, % FTP, Wiederholungen) ankommen und sich per API auslesen lassen, ist zu prüfen. Nach meinem Kenntnisstand kennt intervals.icu strukturierte Workouts und kann sie als .zwo oder .mrc exportieren, das ist aber nicht belegt.
+- **CORS:** Ob der Browser die intervals.icu-API direkt aufrufen darf, ist zu prüfen. Sonst braucht es einen kleinen Proxy.
+- **Speicherung pro Fahrer:** Schlüssel oder Tokens liegen im Browser des Nutzers. Das ist für ein Ein-PC-Setup vertretbar, muss aber als Anforderung stehen.
+- **Freies Training am Bike:** Ob die Gangschaltung des Kickr Bike v2 ohne gesetzte Zielwatt die Leistung ändert, ist am echten Bike zu testen.
 
 ## Offene Fragen für die nächste Runde
 
-1. Hast du einen intervals.icu-API-Schlüssel, und nutzt ihr intervals.icu schon für Strava?
-2. Soll das Blocks-Konto über den offiziellen Blocks-Login oder über einen Schlüssel angebunden werden? Das klären wir mit dem Blocks-Anbieter.
-3. Soll ein Gast seinen FTP-Wert eintippen können, oder darf er immer einen Test machen?
+1. Erscheint ein von Blocks geplantes Training in deinem intervals.icu-Kalender mit Blöcken (Dauer und Leistung), oder nur als Titel? Ein kurzer Blick in den Kalender reicht.
+2. Soll die erste Version nur mit API-Schlüssel laufen, und OAuth folgt später für Frau und Freunde?
+3. Soll die App auf einem öffentlichen Webserver liegen (eine URL, die auch der Freund öffnet), oder nur lokal auf deinem PC laufen?
