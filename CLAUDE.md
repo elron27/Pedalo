@@ -14,6 +14,9 @@ Web-App, lokal auf dem PC, Chrome als Referenz (Windows und Mac), Oberfläche au
 - Start ohne Claude: `Pedalo-starten.cmd` oder `npm start` (Produktionsbuild auf http://localhost:5173, siehe README).
 - Neu seit der ersten ganzen Fahrt (2026-11-21): Gesamt-Restzeit (SR-2eaedc), Pulszonen aus intervals.icu (SR-215ffb, Annahme:
   `sportSettings[].hr_zones` im Athleten-Abruf, am echten Konto noch nicht geprüft), Geschwindigkeit/Distanz in der .fit (SR-f32bce).
+- Neu 2026-11-22 (Issues #2, #3): eigene Pulszonen im Profil mit Vorrang vor intervals.icu, nur Rad-Zonen aus intervals.icu
+  (SR-7f8583, SR-215ffb geändert); Fahrt beginnt erst mit dem ersten Tritt ab 10 U/min oder 10 W, Knopf „Jetzt starten“ (SR-ac9179).
+  In e2e-Tests beginnt eine Fahrt deshalb erst nach `beginNow(page)` oder Trittdaten.
 - Tests: `npm test` (Vitest), `npm run test:e2e` (Playwright mit simuliertem Bike), `npm run test:evidence` schreibt Nachweise.
   35 von 40 SRs verifiziert. Offen sind nur Hardware-Fälle (SR-f83db7, SR-f22ac4, SR-b0d66d, SR-988963, SR-fa0d80).
 - **Nächste Aufgabe: M6 abschließen** nach `docs/m6-abnahme.md`: Rückmeldung von Stefan (Pause per 0 W, Wiederverbindung, Strava

@@ -335,3 +335,8 @@ main.fahrt-seite {
 .verlauf .l.trittfrequenz {
   color: #6b8f7b;
 }
+
+/* Pulszonen im Profil */
+.klein { color: var(--gedaempft); font-size: 0.9rem; margin: 0.25rem 0; }
+.klein.fehlertext { color: var(--gefahr); }
+ul.zonen { list-style: none; padding: 0; margin: 0.25rem 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.9rem; }

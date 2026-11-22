@@ -21,6 +21,8 @@ export interface Profile {
   selectedStrapId?: string;
   /** Zuletzt aus intervals.icu gelesene Pulszonen (gilt auch ohne Netz). */
   hrZones?: HrZones;
+  /** Selbst eingetragene Pulszonen; haben Vorrang vor hrZones und werden von intervals.icu nie überschrieben. */
+  hrZonesOwn?: HrZones;
 }
 
 const KEY = 'profile/';

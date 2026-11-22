@@ -3,7 +3,7 @@ import type { AppState, Controller } from '../app/controller';
 import { buildChart } from '../domain/chart';
 import type { RecordSample } from '../domain/recorder';
 import { remainingTotalSec, totalDurationSec, workoutProfile, type Workout } from '../domain/workout';
-import { zoneOf } from '../domain/zones';
+import { effectiveZones, formatZoneInput, parseZoneInput, zoneOf, zoneRanges } from '../domain/zones';
 import { fmtTime, T } from './texts';
 
 function useAppState(c: Controller): AppState {
@@ -88,12 +88,21 @@ function Start({ c, s }: { c: Controller; s: AppState }) {
 
 function RiderSection({ c, s }: { c: Controller; s: AppState }) {
   const [editing, setEditing] = useState<'neu' | 'bearbeiten' | null>(null);
-  const [form, setForm] = useState({ name: '', ftp: '', athleteId: '', apiKey: '' });
+  const [form, setForm] = useState({ name: '', ftp: '', athleteId: '', apiKey: '', zones: '' });
   const edit = (mode: 'neu' | 'bearbeiten') => {
     const p = mode === 'bearbeiten' ? s.active : null;
-    setForm({ name: p?.name ?? '', ftp: p ? String(p.ftp) : '', athleteId: p?.icu?.athleteId ?? '', apiKey: p?.icu?.apiKey ?? '' });
+    setForm({ name: p?.name ?? '', ftp: p ? String(p.ftp) : '', athleteId: p?.icu?.athleteId ?? '', apiKey: p?.icu?.apiKey ?? '', zones: formatZoneInput(p?.hrZonesOwn) });
     setEditing(mode);
   };
+  let preview: string[] = [];
+  let zoneError: string | undefined;
+  try {
+    const z = parseZoneInput(form.zones);
+    if (z) preview = zoneRanges(z);
+  } catch (e) {
+    zoneError = (e as Error).message;
+  }
+  const valid = effectiveZones(s.active);
   return (
     <section class="karte">
       <h2>{T.fahrer}</h2>
@@ -122,6 +131,11 @@ function RiderSection({ c, s }: { c: Controller; s: AppState }) {
           />
         </label>
       )}
+      {s.active && !editing && (
+        <p class="klein" id="zonen-gelten">
+          {valid ? `${T.zonenGelten} (${s.active.hrZonesOwn ? T.zonenEigene : T.zonenIcu}): ${zoneRanges(valid).join(' · ')}` : T.keineZonen}
+        </p>
+      )}
       <div class="zeile">
         <button class="sekundaer" onClick={() => edit('neu')}>
           {T.neuesProfil}
@@ -143,8 +157,8 @@ function RiderSection({ c, s }: { c: Controller; s: AppState }) {
           onSubmit={(e) => {
             e.preventDefault();
             void c
-              .saveProfile({ id: editing === 'bearbeiten' ? s.active?.id : undefined, name: form.name, ftp: Number(form.ftp), athleteId: form.athleteId, apiKey: form.apiKey })
-              .then(() => setEditing(null));
+              .saveProfile({ id: editing === 'bearbeiten' ? s.active?.id : undefined, name: form.name, ftp: Number(form.ftp), athleteId: form.athleteId, apiKey: form.apiKey, hrZonesText: form.zones })
+              .then((ok) => ok && setEditing(null));
           }}
         >
           <label>
@@ -163,6 +177,31 @@ function RiderSection({ c, s }: { c: Controller; s: AppState }) {
             {T.apiSchluessel}
             <input type="password" value={form.apiKey} onInput={(e) => setForm({ ...form, apiKey: (e.currentTarget as HTMLInputElement).value })} />
           </label>
+          <label>
+            {T.pulszonen}
+            <input inputMode="numeric" placeholder="130, 149, 160, 172, 185" value={form.zones} onInput={(e) => setForm({ ...form, zones: (e.currentTarget as HTMLInputElement).value })} />
+          </label>
+          <p class="klein">{T.pulszonenHilfe}</p>
+          {zoneError ? (
+            <p class="klein fehlertext">{zoneError}</p>
+          ) : (
+            preview.length > 0 && (
+              <ul class="zonen" aria-label="Vorschau Pulszonen">
+                {preview.map((r) => (
+                  <li key={r}>{r}</li>
+                ))}
+              </ul>
+            )
+          )}
+          {form.athleteId.trim() && form.apiKey.trim() && (
+            <button
+              type="button"
+              class="sekundaer"
+              onClick={() => void c.fetchIcuZones({ athleteId: form.athleteId, apiKey: form.apiKey }).then((z) => z && setForm((f) => ({ ...f, zones: formatZoneInput(z) })))}
+            >
+              {T.zonenAusIcu}
+            </button>
+          )}
           <div class="zeile">
             <button type="submit">{T.speichern}</button>
             <button type="button" class="sekundaer" onClick={() => setEditing(null)}>
@@ -380,6 +419,11 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
           {T.vollbild}
         </button>
       </div>
+      {s.waiting && (
+        <div class="banner" id="wartet">
+          {T.wartetAufTritt}
+        </div>
+      )}
       {paused && <div class="banner">{T.imPause}</div>}
       {free && hasWorkout && <div class="banner">{T.imFreienTraining}</div>}
       <div class="werte">
@@ -400,7 +444,13 @@ function Ride({ c, s }: { c: Controller; s: AppState }) {
         </div>
       )}
       <div class="steuerung">
-        {paused ? <button onClick={() => c.resume()}>{T.weiter}</button> : <button onClick={() => c.pause()}>{T.pause}</button>}
+        {s.waiting ? (
+          <button onClick={() => c.startNow()}>{T.jetztStarten}</button>
+        ) : paused ? (
+          <button onClick={() => c.resume()}>{T.weiter}</button>
+        ) : (
+          <button onClick={() => c.pause()}>{T.pause}</button>
+        )}
         {hasWorkout && !free && <button onClick={() => c.skip()}>{T.ueberspringen}</button>}
         {hasWorkout && (
           <span class="intensitaet">

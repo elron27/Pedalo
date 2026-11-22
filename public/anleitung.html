@@ -63,6 +63,7 @@
 
 <h3>Während der Fahrt</h3>
 <ul>
+  <li><strong>Start mit dem ersten Tritt:</strong> Nach dem Klick auf Start steht „Bereit – die Fahrt beginnt, sobald du trittst.“ Uhr und Aufzeichnung laufen erst, wenn du in die Pedale trittst. „Jetzt starten“ beginnt sofort, „Beenden“ bricht ab, ohne etwas zu speichern.</li>
   <li>Große Kacheln zeigen Watt (mit Zielwert), Puls mit Zone, Trittfrequenz, Restzeit des Blocks, Restzeit des ganzen Trainings und Gesamtzeit. Darunter siehst du den Verlauf und den nächsten Block.</li>
   <li><strong>Pause / Weiter:</strong> hält das Training an, der Widerstand geht auf 0 Watt.</li>
   <li><strong>Block überspringen</strong>, <strong>Intensität ± 5 %</strong> ändert alle Zielwerte.</li>
@@ -83,8 +84,10 @@
   <li>Melde dich auf intervals.icu an und öffne <strong>Settings → Developer Settings</strong> (Einstellungen für Entwickler).</li>
   <li>Dort stehen deine <strong>Athlete-ID</strong> (so etwas wie <code>i12345</code>) und der <strong>API-Schlüssel</strong> (über „API key“ erzeugen).</li>
   <li>In Pedalo beim Profil „Profil bearbeiten“ und beide Werte eintragen.</li>
-  <li>Dann zeigt der Reiter „intervals.icu“ deine geplanten Radtrainings, und nach der Fahrt gibt es den Hochladen-Knopf. Aus deinen Einstellungen holt Pedalo außerdem deine Pulszonen für die Farbe der Pulskachel.</li>
+  <li>Dann zeigt der Reiter „intervals.icu“ deine geplanten Radtrainings, und nach der Fahrt gibt es den Hochladen-Knopf. Aus deinen Einstellungen (Rad) holt Pedalo außerdem deine Pulszonen für die Farbe der Pulskachel.</li>
 </ol>
+<h3>Pulszonen selbst eintragen</h3>
+<p>Stimmen die Zonen nicht oder hast du kein intervals.icu-Konto: „Profil bearbeiten“ und im Feld <strong>Pulszonen</strong> die Obergrenze jeder Zone eintippen, durch Komma getrennt, z. B. <code>130, 149, 160, 172, 185</code>. Darunter siehst du sofort die Bereiche („Zone 2: 131–149“). Selbst eingetragene Zonen gelten immer vor denen aus intervals.icu. Feld leeren = wieder die Zonen aus intervals.icu. Mit „Aus intervals.icu übernehmen“ siehst du, was intervals.icu liefert, und kannst es anpassen.</p>
 <div class="karte"><p><strong>Datenschutz:</strong> Der Schlüssel liegt nur in deinem Browser. Pedalo schickt ihn ausschließlich an intervals.icu, sonst nirgendwohin. Es gibt keinen Pedalo-Server und keine Auswertung.</p></div>
 <p class="leise">Trainings mit Rampen oder reiner Pulssteuerung kann Pedalo noch nicht fahren und markiert sie als „nicht darstellbar“. Die Watt werden so gefahren, wie sie im Training stehen (kein Umrechnen auf deine FTP).</p>
 

@@ -22,12 +22,19 @@ async function pairBike(page: Page) {
   await expect(bikeStatus(page)).toHaveText('verbunden');
 }
 
-async function startManual(page: Page, text: string, name = 'Test') {
+async function startManual(page: Page, text: string, name = 'Test', begin = true) {
   await page.getByRole('tab', { name: 'Von Hand' }).click();
   await page.getByLabel('Name des Trainings').fill(name);
   await page.getByRole('textbox', { name: 'Von Hand' }).fill(text);
   await page.getByRole('button', { name: 'Eingegebenes Training starten' }).click();
   await expect(page.getByRole('button', { name: 'Beenden' })).toBeVisible();
+  if (begin) await beginNow(page);
+}
+
+/** Fahrt ohne Tritt beginnen (die Fahrt wartet sonst auf den ersten Tritt, SR-ac9179). */
+async function beginNow(page: Page) {
+  await page.getByRole('button', { name: 'Jetzt starten' }).click();
+  await expect(page.locator('#wartet')).toHaveCount(0);
 }
 
 async function readFit(path: string) {
@@ -47,6 +54,7 @@ test.describe('Fahrt', () => {
     await page.getByLabel('FTP (Watt) für diese Fahrt').fill('250');
     await pairBike(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     await emitBike(page, { power: 150, cadence: 85, speedKmh: 30 });
     await expect(page.locator('#watt .zahl')).toHaveText('150');
     await page.getByRole('button', { name: 'Beenden' }).click();
@@ -59,6 +67,7 @@ test.describe('Fahrt', () => {
     await start(page);
     await pairBike(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     await expect.poll(async () => (await writes(page)).some((w) => w[0] === 0x11)).toBe(true);
     expect((await writes(page)).some((w) => w[0] === 0x05)).toBe(false); // keine Zielleistung
     expect((await writes(page)).find((w) => w[0] === 0x11)).toEqual([0x11, 0, 0, 0, 0, 40, 51]); // Steigung 0 %
@@ -150,6 +159,7 @@ test.describe('Fahrt', () => {
   test('[SR-9851f3/AK-x0cv] der Bildschirm bleibt während des Trainings an', async ({ page }) => {
     await start(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     await expect.poll(() => call(page, 'f.wake')).toEqual(['screen']);
     await page.getByRole('button', { name: 'Beenden' }).click();
     await expect.poll(() => call(page, 'f.wake')).toEqual(['screen', 'release']);
@@ -161,6 +171,7 @@ test.describe('Aufzeichnung und Datei', () => {
     await start(page);
     await pairBike(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     for (let i = 0; i < 4; i++) {
       await emitBike(page, { power: 200 + i, cadence: 90, speedKmh: 32 });
       await page.waitForTimeout(1000);
@@ -179,6 +190,7 @@ test.describe('Aufzeichnung und Datei', () => {
     await start(page);
     await pairBike(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     for (let i = 0; i < 14; i++) {
       await emitBike(page, { power: 180, cadence: 85, speedKmh: 30 });
       await page.waitForTimeout(500);
@@ -367,6 +379,7 @@ test.describe('intervals.icu', () => {
 
     await page.getByRole('tab', { name: 'Freies Training' }).click();
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     await page.getByRole('button', { name: 'Beenden' }).click();
     await page.getByRole('button', { name: 'Zu intervals.icu hochladen' }).click();
     await expect(page.getByText('Hochgeladen zu intervals.icu (Aktivität i99).')).toBeVisible();
@@ -405,6 +418,7 @@ test.describe('Darstellung', () => {
     expect(r.body).toBeLessThan(0.05);
     await pairBike(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     r = await dark();
     expect(r.bad).toEqual([]);
     await page.getByRole('button', { name: 'Beenden' }).click();
@@ -456,6 +470,7 @@ test.describe('Darstellung', () => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await start(page);
     await page.getByRole('button', { name: 'Freies Training starten' }).click();
+    await beginNow(page);
     const size = await page.locator('#watt .zahl').evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
     expect(size).toBeGreaterThanOrEqual(150);
     await expect(page.getByRole('button', { name: 'Vollbild' })).toBeVisible();

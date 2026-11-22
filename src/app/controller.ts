@@ -6,7 +6,7 @@ import { addStrap, newId, ProfileStore, riderContext, selectStrap, type Profile,
 import { deleteRecording, listSessions, Recorder, recoverRecording, type Latest, type RecordSample, type Recording, type SessionMeta } from '../domain/recorder';
 import { parseManualBlocks, type Workout } from '../domain/workout';
 import { Supervisor } from '../devices/supervisor';
-import type { HrZones } from '../domain/zones';
+import { effectiveZones, parseZoneInput, type HrZones } from '../domain/zones';
 import { IcuClient, type IcuSkipped, type IcuWorkout } from '../icu/client';
 import type { Clock, ConnectionStatus, HeartRatePort, KeyValueStore, TrainerPort, WakeLockPort } from '../ports';
 import { T } from '../ui/texts';
@@ -42,6 +42,8 @@ export interface AppState {
   player: PlayerState | null;
   library: LibraryEntry[];
   hrZones?: HrZones | undefined;
+  /** Fahrt gestartet, wartet aber noch auf den ersten Tritt. */
+  waiting?: boolean;
   icu: { loading: boolean; workouts: IcuWorkout[]; skipped: IcuSkipped[]; error?: string };
   unfinished: SessionMeta[];
   recent: SessionMeta[];
@@ -67,6 +69,9 @@ export interface Deps {
 }
 
 const STALE_MS = 5000;
+/** Erster Tritt: ab dieser Trittfrequenz (U/min) oder Leistung (W) beginnt die Fahrt (SR-ac9179; gewählt, unbestätigt). */
+export const START_CADENCE = 10;
+export const START_POWER = 10;
 
 /** Verbindet Kern und Oberfläche. Die Oberfläche liest nur state() und ruft Methoden auf. */
 export class Controller {
@@ -99,6 +104,7 @@ export class Controller {
   private liveRaw: { power?: number; cadence?: number; speedKmh?: number; heartRate?: number } = {};
   private cadences: (number | undefined)[] = [];
   private lastLapIndex = -1;
+  private pendingMeta: { workoutName: string; riderName: string; ftp?: number | undefined } | null = null;
 
   constructor(private readonly d: Deps) {
     // Bei wiederholten Verbindungsversuchen nur den ersten Fehlschlag als Meldung zeigen, die weiteren stehen im Protokoll.
@@ -215,15 +221,33 @@ export class Controller {
     });
   }
 
-  async saveProfile(input: { id?: string; name: string; ftp: number; athleteId?: string; apiKey?: string }): Promise<void> {
+  /** Liefert true, wenn gespeichert wurde (bei Fehlern bleibt das Formular offen). */
+  async saveProfile(input: { id?: string; name: string; ftp: number; athleteId?: string; apiKey?: string; hrZonesText?: string }): Promise<boolean> {
+    let ok = false;
     await this.guard(undefined, async () => {
       const old = input.id ? await this.d.profiles.get(input.id) : undefined;
       const icu = input.athleteId?.trim() && input.apiKey?.trim() ? { athleteId: input.athleteId.trim(), apiKey: input.apiKey.trim() } : undefined;
+      const own = input.hrZonesText === undefined ? old?.hrZonesOwn : parseZoneInput(input.hrZonesText);
       const p: Profile = { hrStraps: [], ...old, id: old?.id ?? newId(), name: input.name.trim(), ftp: input.ftp, icu };
+      if (own) p.hrZonesOwn = own;
+      else delete p.hrZonesOwn;
       await this.d.profiles.save(p);
       await this.d.profiles.setActive(p.id);
       await this.refreshProfiles();
+      ok = true;
     });
+    return ok;
+  }
+
+  /** Pulszonen aus intervals.icu für das Profilformular holen (zum Übernehmen und Prüfen). */
+  async fetchIcuZones(account: { athleteId: string; apiKey: string }): Promise<HrZones | undefined> {
+    let zones: HrZones | undefined;
+    await this.guard(T.ladePulszonen, async () => {
+      zones = await this.d.makeIcu({ athleteId: account.athleteId.trim(), apiKey: account.apiKey.trim() }).getHrZones();
+      this.d.log?.('pulszonen.icu', zones?.upper);
+      if (!zones) throw new Error(T.keinePulszonenIcu);
+    });
+    return zones;
   }
 
   async removeProfile(id: string): Promise<void> {
@@ -335,11 +359,9 @@ export class Controller {
       if (kind === 'training' && !w) throw new Error(T.keinTraining);
       const rider = this.rider();
       const name = w?.name ?? (kind === 'frei' ? T.freiesTraining : kind === 'zwanzig' ? T.zwanzigMinTest : T.vierDpTest);
-      this.recorder = new Recorder(
-        { sessionId: newId(), startedAt: new Date(this.d.clock.now()), workoutName: name, riderName: rider.name, ftp: rider.ftp },
-        this.d.recStore,
-        { onError: (e) => this.fail(e) },
-      );
+      // Aufzeichnung und Uhr beginnen erst mit dem ersten Tritt (beginRide), nicht schon beim Klick auf Start.
+      this.pendingMeta = { workoutName: name, riderName: rider.name, ftp: rider.ftp };
+      this.recorder = null;
       this.cadences = [];
       this.lastLapIndex = -1;
       this.player = new Player(w, this.d.trainer, this.d.clock, {
@@ -348,13 +370,27 @@ export class Controller {
       });
       this.player.onChange((ps) => this.onPlayerChange(ps));
       this.d.log?.('fahrt.start', { kind, training: w?.name, bloecke: w?.blocks.length });
-      this.patch({ screen: 'fahrt', rideKind: kind, workout: w, result: undefined, error: undefined, hrZones: rider.profile?.hrZones });
+      this.patch({ screen: 'fahrt', rideKind: kind, workout: w, result: undefined, error: undefined, hrZones: effectiveZones(rider.profile), waiting: true, player: this.player.state() });
       void this.refreshHrZones();
       void this.d.wake.acquire().catch((e) => this.fail(e));
-      this.player.start();
-      this.nextRecordAt = this.d.clock.now() + 1000;
       this.timer = setInterval(() => this.onTimer(), 250);
     });
+  }
+
+  /** Fahrt sofort beginnen, ohne auf den ersten Tritt zu warten (Knopf „Jetzt starten“). */
+  startNow(): void {
+    this.beginRide();
+  }
+
+  private beginRide(): void {
+    if (!this.s.waiting || !this.player || !this.pendingMeta) return;
+    const now = this.d.clock.now();
+    this.recorder = new Recorder({ sessionId: newId(), startedAt: new Date(now), ...this.pendingMeta }, this.d.recStore, { onError: (e) => this.fail(e) });
+    this.pendingMeta = null;
+    this.d.log?.('fahrt.erster-tritt', { power: this.liveRaw.power, cadence: this.liveRaw.cadence });
+    this.patch({ waiting: false });
+    this.player.start();
+    this.nextRecordAt = now + 1000;
   }
 
   /** Pulszonen aus intervals.icu auffrischen; ohne Konto oder bei Fehlern bleiben die zuletzt gespeicherten. */
@@ -363,9 +399,13 @@ export class Controller {
     if (!p?.icu) return;
     try {
       const zones = await this.d.makeIcu(p.icu).getHrZones();
+      this.d.log?.('pulszonen.icu', zones?.upper);
       if (!zones) return;
-      if (this.s.active?.id === p.id) this.patch({ hrZones: zones });
-      await this.d.profiles.save({ ...p, hrZones: zones });
+      // Neu lesen, damit eine Änderung am Profil während des Abrufs nicht verloren geht; eigene Zonen bleiben unberührt.
+      const cur = (await this.d.profiles.get(p.id)) ?? p;
+      const saved = { ...cur, hrZones: zones };
+      await this.d.profiles.save(saved);
+      if (this.s.active?.id === p.id) this.patch({ active: saved, hrZones: effectiveZones(saved) });
     } catch (e) {
       this.d.log?.('pulszonen.fehler', String(e));
     }
@@ -396,6 +436,14 @@ export class Controller {
   }
 
   private onTimer(): void {
+    if (this.s.waiting) {
+      const l = this.latest();
+      if ((l.cadence ?? 0) >= START_CADENCE || (l.power ?? 0) >= START_POWER) this.beginRide();
+      else {
+        this.patch({ live: l });
+        return;
+      }
+    }
     this.player?.tick();
     let recorded = false;
     while (this.d.clock.now() >= this.nextRecordAt && this.recorder) {
@@ -438,6 +486,20 @@ export class Controller {
   }
 
   async finishRide(): Promise<void> {
+    if (this.s.waiting && this.s.screen === 'fahrt') {
+      // Noch nicht getreten: abbrechen, nichts speichern.
+      if (this.timer) clearInterval(this.timer);
+      this.timer = undefined;
+      const player = this.player;
+      this.player = null;
+      this.pendingMeta = null;
+      player?.finish();
+      this.d.log?.('fahrt.abgebrochen-vor-start');
+      await this.d.wake.release().catch((e) => this.fail(e));
+      this.patch({ waiting: false, live: {}, seconds: 0 });
+      this.backToStart();
+      return;
+    }
     const rec = this.recorder;
     if (!rec || this.s.screen !== 'fahrt') return;
     if (this.timer) clearInterval(this.timer);
